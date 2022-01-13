@@ -35,45 +35,7 @@ const brandRing = {
 export const Button = {
   baseStyle: {
     borderRadius: 'md',
-    // fontWeight: 'normal',
     ...brandRing,
-  },
-  variants: {
-    footerExternalLink: {
-      mt: '1rem',
-      mb: '1rem',
-      as: 'a',
-      target: '_blank',
-      fontSize: '1.5rem',
-      width: '1.5rem',
-      height: '1.5rem',
-      _hover: {
-        color: 'pink.900',
-        bg: 'transparent',
-      },
-      _active: {
-        color: 'pink.900',
-        bg: 'transparent',
-      },
-    },
-    actionBtnIcon: {
-      minW: '1.2rem',
-      h: '1.2rem',
-      my: '0.5rem',
-      color: 'gray.500',
-    },
-    iconBtn: {
-      as: 'span',
-      minW: '1.5rem',
-      color: 'gray.700',
-      height: '1.5rem',
-      _hover: {
-        color: 'pink.900',
-      },
-      _active: {
-        color: 'pink.900',
-      },
-    },
   },
 }
 const components = {
