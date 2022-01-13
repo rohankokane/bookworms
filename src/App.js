@@ -1,17 +1,19 @@
-import { lazy, Suspense } from 'react'
-import './App.css'
-import { useAuth } from './context/auth-context'
-const AuthenticatedApp = lazy(() =>
-  import(/* webpackPrefetch: true */ './AuthenticatedApp')
-)
-const UnauthenticatedApp = lazy(() => import('./UnauthenticatedApp'))
+// import { lazy, Suspense } from 'react'
+import { useAuth } from 'context/authContext'
+import AuthenticatedApp from 'AuthenticatedApp'
+import UnauthenticatedApp from 'UnauthenticatedApp'
+
+// const AuthenticatedApp = lazy(() =>
+//   import(/* webpackPrefetch: true */ './AuthenticatedApp')
+// )
+// const UnauthenticatedApp = lazy(() => import('./UnauthenticatedApp'))
 
 function App() {
-  const user = useAuth()
+  const { token } = useAuth()
   return (
-    <Suspense fallback={'Loading...'}>
-      {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
-    </Suspense>
+    // <Suspense fallback={'Loading...'}>
+    token ? <AuthenticatedApp /> : <UnauthenticatedApp />
+    // </Suspense>
   )
 }
 
