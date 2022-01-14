@@ -2,8 +2,7 @@ import { useState } from 'react'
 import LoginForm from './LoginForm'
 import SignUpForm from './SignUpForm'
 
-function AuthenticationForm() {
-  const [loginForm, setLoginForm] = useState(true)
+function AuthenticationForm({ isLoginMode, setLoginMode }) {
   // const [input, setInput] = useState('')
   // const [showPassword, setShowPassword] = useState(false)
   // // const {isLoading, isError, error, run} = useAsync()
@@ -11,10 +10,10 @@ function AuthenticationForm() {
   // const isLoading = false
   // const isError = false
 
-  return loginForm ? (
-    <LoginForm setLoginForm={setLoginForm} />
+  return isLoginMode ? (
+    <LoginForm setLoginMode={setLoginMode} />
   ) : (
-    <SignUpForm setLoginForm={setLoginForm} />
+    <SignUpForm setLoginMode={setLoginMode} />
   )
 }
 

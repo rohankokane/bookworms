@@ -1,4 +1,5 @@
 import { Image, VStack } from '@chakra-ui/react'
+import { ReactComponent as BannerImg } from '../../assets/banner-img.svg'
 // import banner from './banner.jpg'
 
 function Banner() {
@@ -9,9 +10,11 @@ function Banner() {
       h='full'
       p={1}
       spacing={10}
-      alignItems='flex-start'
+      alignItems='center'
+      justifyContent={'center'}
     >
-      <Image alt='bibliophiles in a group' src='/banner.jpg' loading='lazy' />
+      <BannerImg style={{ margin: '0 auto' }} />
+      {/* <Image alt='bibliophiles in a group' src='/banner.jpg' loading='lazy' /> */}
     </VStack>
   )
 }

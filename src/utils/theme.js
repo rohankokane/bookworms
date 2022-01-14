@@ -38,8 +38,16 @@ export const Button = {
     ...brandRing,
   },
 }
+const Heading = {
+  variants: {
+    logo: {
+      fontFamily: `'Sacramento', cursive`,
+    },
+  },
+}
 const components = {
   Button,
+  Heading,
 }
 export const theme = extendTheme(
   {
