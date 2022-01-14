@@ -2,12 +2,15 @@
 import { AuthProvider } from 'context/authContext'
 import { ChakraProvider } from '@chakra-ui/react'
 import { theme } from 'utils/theme'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 function AppProviders({ children }) {
   return (
     <>
       <ChakraProvider theme={theme}>
-        <AuthProvider>{children}</AuthProvider>
+        <Router>
+          <AuthProvider>{children}</AuthProvider>
+        </Router>
       </ChakraProvider>
     </>
   )

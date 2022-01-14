@@ -1,10 +1,11 @@
-function FullPageErrorFallback({ error }) {
+function ErrorFallback({ error }) {
   return (
     <div
-      role="alert"
-      css={{
+      role='alert'
+      style={{
         color: 'red',
-        height: '100vh',
+        width: '100%',
+        height: '100%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -17,4 +18,4 @@ function FullPageErrorFallback({ error }) {
   )
 }
 
-export default FullPageErrorFallback
+export default ErrorFallback

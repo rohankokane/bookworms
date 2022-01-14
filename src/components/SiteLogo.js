@@ -1,12 +1,14 @@
 import { Heading } from '@chakra-ui/react'
 
-function SiteLogo() {
+function SiteLogo({ size = '2xl', ...props }) {
   return (
     <Heading
       variant={'logo'}
       textAlign={'center'}
-      marginBottom={'1rem'}
-      size='2xl'
+      marginBottom={'0'}
+      size={size}
+      whiteSpace={'nowrap'}
+      {...props}
     >
       Bookworms🐛
     </Heading>

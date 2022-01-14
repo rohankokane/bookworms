@@ -12,7 +12,7 @@ function App() {
   const { token } = useAuth()
   return (
     // <Suspense fallback={'Loading...'}>
-    token ? <AuthenticatedApp /> : <UnauthenticatedApp />
+    !token ? <AuthenticatedApp /> : <UnauthenticatedApp />
     // </Suspense>
   )
 }

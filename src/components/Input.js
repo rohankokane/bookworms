@@ -40,6 +40,7 @@ function FormInput({
   initialValue,
   initialValid,
   rows,
+  ...restProps
 }) {
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: initialValue || '',
@@ -71,7 +72,11 @@ function FormInput({
     type === 'password' ? (showPassword ? 'text' : 'password') : type
 
   return (
-    <FormControl isRequired isInvalid={isTouched && !isValid}>
+    <FormControl
+      w={'xs'}
+      isRequired={isRequired}
+      isInvalid={errorMessage && isTouched && !isValid}
+    >
       {inputType === 'textArea' ? (
         <Textarea
           id={id}
@@ -90,6 +95,7 @@ function FormInput({
           onChange={handleInputChange}
           onBlur={handleFocusChange}
           placeholder={placeholder}
+          {...restProps}
         />
       )}
 

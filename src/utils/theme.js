@@ -37,6 +37,14 @@ export const Button = {
     borderRadius: 'md',
     ...brandRing,
   },
+  variants: {
+    postIcon: {
+      background: 'transparent',
+      borderRadius: 'full',
+      color: 'gray.300',
+      fontSize: '20px',
+    },
+  },
 }
 const Heading = {
   variants: {
@@ -45,9 +53,18 @@ const Heading = {
     },
   },
 }
+const Container = {
+  variants: {
+    mainContainer: {
+      maxWidth: ['full', '600px', '900px', '900px', '950px'],
+    },
+  },
+}
+
 const components = {
   Button,
   Heading,
+  Container,
 }
 export const theme = extendTheme(
   {
