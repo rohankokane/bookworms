@@ -73,7 +73,6 @@ function FormInput({
 
   return (
     <FormControl
-      w={'xs'}
       isRequired={isRequired}
       isInvalid={errorMessage && isTouched && !isValid}
     >

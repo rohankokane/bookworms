@@ -15,6 +15,7 @@ function Post() {
       overflow='hidden'
       p={0}
       bg='white'
+      my={4}
     >
       <Flex px='2' py='2' w='full' direction={'horizontal'} align={'center'}>
         <Avatar

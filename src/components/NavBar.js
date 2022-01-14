@@ -49,15 +49,17 @@ function NavBar() {
         >
           <SiteLogo display={logoDisplay} size='lg' />
           <Spacer />
-          <FormInput
-            onChange={(a, n) => {
-              console.log(a, n)
-            }}
-            size={'sm'}
-            id='search'
-            type='text'
-            placeholder='search'
-          />
+          <Box w='xs'>
+            <FormInput
+              onChange={(a, n) => {
+                console.log(a, n)
+              }}
+              size={'sm'}
+              id='search'
+              type='text'
+              placeholder='search'
+            />
+          </Box>
           <Spacer />
           <Menu>
             <MenuButton

@@ -60,11 +60,25 @@ const Container = {
     },
   },
 }
+const Divider = {
+  baseStyle: {
+    opacity: '1',
+  },
+}
+const Avatar = {
+  sizes: {
+    '2xl': {
+      size: '10rem',
+    },
+  },
+}
 
 const components = {
   Button,
   Heading,
   Container,
+  Divider,
+  Avatar,
 }
 export const theme = extendTheme(
   {

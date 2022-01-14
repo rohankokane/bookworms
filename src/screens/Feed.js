@@ -1,5 +1,6 @@
 import { Grid, GridItem, useBreakpointValue } from '@chakra-ui/react'
 import Post from 'components/feed/Post'
+import PostsList from 'components/feed/PostsList'
 import Sidebar from 'components/feed/Sidebar'
 
 function Feed() {
@@ -14,7 +15,7 @@ function Feed() {
   return (
     <Grid templateColumns='repeat(3,1fr)' gap={8}>
       <GridItem colSpan={feedColSpan}>
-        <Post />
+        <PostsList />
       </GridItem>
       <GridItem
         display={sideBarDisplay}
