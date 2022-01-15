@@ -22,7 +22,7 @@ function AuthenticatedApp() {
 function AppRoutes() {
   return (
     <Routes>
-      <Route path='/feed' element={<Feed />} />
+      <Route exact path='/' element={<Feed />} />
       <Route path='/profile/me' element={<UserProfile />} />
       <Route path='/profile/:id' element={<UserProfile />} />
       {/* <Route path="*" element={<NotFoundScreen />} /> */}

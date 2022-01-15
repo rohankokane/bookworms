@@ -3,8 +3,26 @@ import SiteLogo from '../SiteLogo'
 import { useForm } from 'hooks/form-hook'
 import FormInput from '../Input'
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH } from 'utils/validators'
+import { useAuth } from 'context/authContext'
+import { useClient } from 'hooks/client-hook'
+import { useAsync } from 'hooks/async-hook'
 
 function LoginForm({ setLoginMode }) {
+  const auth = useAuth()
+  const client = useClient()
+  const {
+    isIdle,
+    isLoading,
+    isError,
+    isSuccess,
+
+    setData,
+    error,
+    data,
+    run,
+    reset,
+  } = useAsync()
+
   const [formState, inputHandler, setFormData] = useForm(
     {
       email: {
@@ -18,9 +36,23 @@ function LoginForm({ setLoginMode }) {
     },
     false
   )
+  const handleLogin = async () => {
+    const loginFormData = {
+      email: formState.inputs.email.value,
+      password: formState.inputs.password.value,
+    }
+
+    console.log('login in')
+    const resData = await run(
+      client('users/login', {
+        data: loginFormData,
+        method: 'POST',
+      })
+    )
+    auth.login(resData.userId, resData.token)
+  }
 
   // const {isLoading, isError, error, run} = useAsync()
-  const isLoading = false
 
   return (
     <VStack w='full' h='full' p={10} spacing={6} alignItems='center'>
@@ -61,6 +93,7 @@ function LoginForm({ setLoginMode }) {
             disabled={!formState.isValid || isLoading}
             w='full'
             variant={'solid'}
+            onClick={handleLogin}
           >
             Login
             {isLoading ? <Spinner css={{ marginLeft: 5 }} /> : null}

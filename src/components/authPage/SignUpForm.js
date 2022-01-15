@@ -20,12 +20,38 @@ import {
 } from 'utils/validators'
 import FormInput from 'components/Input'
 import { useForm } from 'hooks/form-hook'
+import { useClient } from 'hooks/client-hook'
+import { useAsync } from 'hooks/async-hook'
+import { useAuth } from 'context/authContext'
 
 const isLoading = false
 function SignUpForm({ setLoginMode }) {
+  const auth = useAuth()
+  const client = useClient()
+  const {
+    isIdle,
+    isLoading,
+    isError,
+    isSuccess,
+
+    setData,
+    error,
+    data,
+    run,
+    reset,
+  } = useAsync()
+
   const [formState, inputHandler, setFormData] = useForm(
     {
       email: {
+        value: '',
+        isValid: false,
+      },
+      username: {
+        value: '',
+        isValid: false,
+      },
+      fullname: {
         value: '',
         isValid: false,
       },
@@ -33,9 +59,32 @@ function SignUpForm({ setLoginMode }) {
         value: '',
         isValid: false,
       },
+      bio: {
+        value: '',
+        isValid: false,
+      },
     },
     false
   )
+
+  const handleSignUp = async () => {
+    const signupData = {
+      email: formState.inputs.email.value,
+      password: formState.inputs.password.value,
+      username: formState.inputs.username.value,
+      fullname: formState.inputs.fullname.value,
+      bio: formState.inputs.bio.value,
+    }
+
+    console.log('signing up')
+    const resData = await run(
+      client('users/signup', {
+        data: signupData,
+        method: 'POST',
+      })
+    )
+    auth.login(resData.userId, resData.token)
+  }
 
   return (
     <VStack w='full' h='full' p={10} spacing={6} alignItems='center'>
@@ -77,6 +126,14 @@ function SignUpForm({ setLoginMode }) {
             validators={[VALIDATOR_MINLENGTH(6)]}
             errorMessage='Please enter a valid password, at least 6 characters.'
           />
+          <FormInput
+            id='bio'
+            type={'bio'}
+            onChange={inputHandler}
+            placeholder='Bio'
+            validators={[VALIDATOR_MINLENGTH(6)]}
+            errorMessage='Please write a short bio.'
+          />
         </VStack>
 
         <VStack w={'full'} alignItems='flex-start' spacing={4}>
@@ -85,6 +142,7 @@ function SignUpForm({ setLoginMode }) {
             disabled={!formState.isValid || isLoading}
             w='full'
             variant={'solid'}
+            onClick={handleSignUp}
           >
             Sign up
             {isLoading ? <Spinner css={{ marginLeft: 5 }} /> : null}

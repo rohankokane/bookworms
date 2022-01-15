@@ -27,7 +27,7 @@ function Post() {
           Dan Abramov
         </Button>
         <Spacer />
-        <IconBtn icon={<FaTrash />} />
+        <IconBtn aria-label='delete this post' icon={<FaTrash />} />
       </Flex>
       <Divider />
       <Box as='p' w='full' textAlign={'left'} p={4}>

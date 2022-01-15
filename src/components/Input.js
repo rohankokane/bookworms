@@ -30,16 +30,16 @@ const inputReducer = (state, action) => {
 }
 
 function FormInput({
-  id = '',
+  id = '', //req
   type = 'text',
   isRequired = false,
   placeholder = '',
-  onChange: formChange,
+  onChange: formChange, //req
   validators,
   errorMessage = '',
   initialValue,
   initialValid,
-  rows,
+  rows, //if textarea
   ...restProps
 }) {
   const [inputState, dispatch] = useReducer(inputReducer, {
@@ -76,7 +76,7 @@ function FormInput({
       isRequired={isRequired}
       isInvalid={errorMessage && isTouched && !isValid}
     >
-      {inputType === 'textArea' ? (
+      {inputType === 'textarea' ? (
         <Textarea
           id={id}
           rows={rows || 3}

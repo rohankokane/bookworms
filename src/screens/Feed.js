@@ -2,8 +2,18 @@ import { Grid, GridItem, useBreakpointValue } from '@chakra-ui/react'
 import Post from 'components/feed/Post'
 import PostsList from 'components/feed/PostsList'
 import Sidebar from 'components/feed/Sidebar'
+import { useAsync } from 'hooks/async-hook'
+import { useClient } from 'hooks/client-hook'
+import { useEffect } from 'react'
 
 function Feed() {
+  const client = useClient()
+  const { isLoading, isError, data, run } = useAsync()
+  useEffect(() => {
+    // getAll POsts
+    // run(client(''))
+  }, [])
+
   const sideBarDisplay = useBreakpointValue({
     base: 'none',
     sm: 'none',
