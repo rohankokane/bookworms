@@ -3,7 +3,10 @@ import UserTag from './UserTag'
 
 function SuggestionList() {
   return (
-    <List spacing={3}>
+    <List w={'14rem'} spacing={3}>
+      <ListItem>
+        <UserTag />
+      </ListItem>
       <ListItem>
         <UserTag />
       </ListItem>

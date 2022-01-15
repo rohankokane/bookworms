@@ -13,6 +13,7 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react'
 import FormInput from './Input'
+import SearchBox from './navBar/SearchBox'
 import SiteLogo from './SiteLogo'
 
 function NavBar() {
@@ -49,17 +50,7 @@ function NavBar() {
         >
           <SiteLogo display={logoDisplay} size='lg' />
           <Spacer />
-          <Box w='xs'>
-            <FormInput
-              onChange={(a, n) => {
-                console.log(a, n)
-              }}
-              size={'sm'}
-              id='search'
-              type='text'
-              placeholder='search'
-            />
-          </Box>
+          <SearchBox />
           <Spacer />
           <Menu>
             <MenuButton
@@ -75,9 +66,9 @@ function NavBar() {
               variant={'ghost'}
               borderRadius={'full'}
             />
-            <MenuList>
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Logout</MenuItem>
+            <MenuList size={'xs'}>
+              <MenuItem size={'xs'}>Profile</MenuItem>
+              <MenuItem size={'xs'}>Logout</MenuItem>
             </MenuList>
           </Menu>
         </Container>

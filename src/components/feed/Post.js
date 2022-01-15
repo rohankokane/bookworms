@@ -30,8 +30,10 @@ function Post() {
         <IconBtn icon={<FaTrash />} />
       </Flex>
       <Divider />
-      <Box w='full' textAlign={'left'} p={4}>
-        <p>Dan Abramov</p>
+      <Box as='p' w='full' textAlign={'left'} p={4}>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab corporis
+        laudantium quisquam vitae expedita mollitia, magnam consectetur placeat
+        vel excepturi.
       </Box>
       <Divider />
       <Flex px='2' py='2' w='full' direction={'horizontal'} align={'center'}>
