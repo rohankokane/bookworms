@@ -1,8 +1,14 @@
 import { Button, Flex, VStack } from '@chakra-ui/react'
 import FormInput from 'components/Input'
-import { useForm } from 'hooks/form-hook'
+import { useClient } from 'hooks/client-hook'
+import { useForm, prepareFormData } from 'hooks/form-hook'
+import { useDispatch } from 'react-redux'
+import { createPost } from 'store/postsSlice'
 
-function CreatePostForm({ onSubmit }) {
+function CreatePostForm({ onClose }) {
+  const dispatch = useDispatch()
+
+  const client = useClient()
   const [formState, inputHandler] = useForm(
     {
       caption: {
@@ -12,6 +18,13 @@ function CreatePostForm({ onSubmit }) {
     },
     false
   )
+  const handleCreatePost = async (data) => {
+    const dataToSend = prepareFormData(data)
+    dispatch(createPost(client('posts', { data: dataToSend }))).then(() => {
+      onClose()
+    })
+  }
+
   return (
     <VStack>
       <FormInput
@@ -19,10 +32,12 @@ function CreatePostForm({ onSubmit }) {
         placeholder='What are you reading today?'
         onChange={inputHandler}
         type='textarea'
-        rows='7'
+        rows='6'
       />
       <Flex paddingY='2' w='full' justify='end'>
-        <Button onClick={() => onSubmit(formState)}>Post</Button>
+        <Button size='sm' onClick={() => handleCreatePost(formState)}>
+          Post
+        </Button>
       </Flex>
     </VStack>
   )

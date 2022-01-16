@@ -38,7 +38,7 @@ function NavBar() {
     sm: 'none',
     md: 'block',
   })
-  const handleCreatePost = (data) => {}
+
   return (
     <nav>
       <Center
@@ -122,7 +122,7 @@ function NavBar() {
               <ModalHeader>Create new post</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <CreatePostForm onSubmit={handleCreatePost} />
+                <CreatePostForm onClose={onClose} />
               </ModalBody>
             </ModalContent>
           </Modal>

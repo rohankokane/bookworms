@@ -1,4 +1,11 @@
-import { Button, Divider, Spinner, Text, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  Divider,
+  Spinner,
+  Text,
+  useToast,
+  VStack,
+} from '@chakra-ui/react'
 import SiteLogo from '../SiteLogo'
 import { useForm } from 'hooks/form-hook'
 import FormInput from '../Input'
@@ -10,18 +17,9 @@ import { useAsync } from 'hooks/async-hook'
 function LoginForm({ setLoginMode }) {
   const auth = useAuth()
   const client = useClient()
-  const {
-    isIdle,
-    isLoading,
-    isError,
-    isSuccess,
-
-    setData,
-    error,
-    data,
-    run,
-    reset,
-  } = useAsync()
+  const toast = useToast()
+  const { isIdle, isLoading, isError, isSuccess, error, data, run, reset } =
+    useAsync()
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -43,13 +41,25 @@ function LoginForm({ setLoginMode }) {
     }
 
     console.log('login in')
-    const resData = await run(
+    run(
       client('users/login', {
         data: loginFormData,
         method: 'POST',
       })
     )
-    auth.login(resData.userId, resData.token)
+      .then((resData) => {
+        auth.login(resData.userId, resData.token)
+      })
+      .catch((err) => {
+        toast({
+          title: 'Error occurred',
+          description: `${err.message} Please try again`,
+          status: 'error',
+          position: 'bottom-right',
+          duration: 5000,
+          isClosable: true,
+        })
+      })
   }
 
   // const {isLoading, isError, error, run} = useAsync()

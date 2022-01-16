@@ -1,11 +1,16 @@
+import { List, ListItem } from '@chakra-ui/react'
 import Post from './Post'
 
-function PostsList() {
+function PostsList({ posts }) {
   return (
     <>
-      <Post />
-      <Post />
-      <Post />
+      <List>
+        {posts.map((post) => (
+          <ListItem key={post.id}>
+            <Post post={post} />
+          </ListItem>
+        ))}
+      </List>
     </>
   )
 }

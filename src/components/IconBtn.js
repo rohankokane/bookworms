@@ -5,7 +5,7 @@ function IconBtn({ icon, highLighted, ...props }) {
     <IconButton
       variant={'postIcon'}
       icon={icon}
-      color={highLighted && 'brand.500'}
+      color={highLighted ? 'brand.500' : 'gray.300'}
       {...props}
     />
   )

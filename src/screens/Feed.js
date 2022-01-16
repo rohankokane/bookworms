@@ -2,16 +2,21 @@ import { Grid, GridItem, useBreakpointValue } from '@chakra-ui/react'
 import Post from 'components/feed/Post'
 import PostsList from 'components/feed/PostsList'
 import Sidebar from 'components/feed/Sidebar'
+import { useAuth } from 'context/authContext'
 import { useAsync } from 'hooks/async-hook'
 import { useClient } from 'hooks/client-hook'
 import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
+import { getPosts } from 'store/postsSlice'
 
 function Feed() {
-  const client = useClient()
-  const { isLoading, isError, data, run } = useAsync()
+  const { status, error, posts } = useSelector((state) => state.posts)
+  const { token } = useAuth()
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    // getAll POsts
-    // run(client(''))
+    dispatch(getPosts(token))
   }, [])
 
   const sideBarDisplay = useBreakpointValue({
@@ -25,11 +30,11 @@ function Feed() {
   return (
     <Grid templateColumns='repeat(3,1fr)' gap={8}>
       <GridItem colSpan={feedColSpan}>
-        <PostsList />
+        <PostsList posts={posts} />
       </GridItem>
       <GridItem
         display={sideBarDisplay}
-        style={{ position: 'sticky', top: '60px' }}
+        style={{ position: 'sticky', top: '80px', height: '80vh' }}
         colSpan={sideBarColSpan}
       >
         <Sidebar />

@@ -35,6 +35,14 @@ const formReducer = (state, action) => {
   }
 }
 
+export const prepareFormData = (stateData) => {
+  if (!stateData.isValid) return
+  let data = {}
+  for (const key in stateData.inputs) {
+    data[key] = stateData.inputs[key].value
+  }
+  return data
+}
 export const useForm = (initialInputs, initialFormValidity) => {
   const [formState, dispatch] = useReducer(formReducer, {
     inputs: initialInputs,

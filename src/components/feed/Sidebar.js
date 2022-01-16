@@ -11,7 +11,7 @@ import SuggestionList from './SuggestionList'
 
 function Sidebar() {
   return (
-    <Box h='80vh' as={'aside'}>
+    <Box as={'aside'}>
       <VStack>
         <HStack>
           <Avatar
