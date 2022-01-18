@@ -1,10 +1,7 @@
 import {
   Avatar,
-  Box,
-  Button,
   Center,
   Container,
-  Flex,
   Spacer,
   useBreakpointValue,
   useDisclosure,
@@ -12,26 +9,25 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react'
-import { useAuth } from 'context/authContext'
 import IconBtn from './IconBtn'
-import FormInput from './Input'
 import SearchBox from './navBar/SearchBox'
 import SiteLogo from './SiteLogo'
 import { AiFillHome, AiFillPlusCircle } from 'react-icons/ai'
-import { BsFillPlusCircleFill } from 'react-icons/bs'
 import { IoLogOut } from 'react-icons/io5'
-import CreatePost from './feed/CreatePost'
 import CreatePostForm from './feed/CreatePostForm'
-import { useAsync } from 'hooks/async-hook'
 import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { logout } from 'store/userSlice'
+
 function NavBar() {
   const navigate = useNavigate()
-  const { logout } = useAuth()
-  // const {isLoading, isSuccess} = useAsync();
+  const dispatch = useDispatch()
+  const onLogout = () => {
+    dispatch(logout())
+  }
   const { isOpen, onOpen, onClose } = useDisclosure()
   const logoDisplay = useBreakpointValue({
     base: 'none',
@@ -92,7 +88,7 @@ function NavBar() {
             p={1}
             color={'brand.500'}
             mx={1}
-            onClick={logout}
+            onClick={onLogout}
             icon={<IoLogOut />}
           />
           <IconBtn
@@ -114,8 +110,6 @@ function NavBar() {
               />
             }
           />
-
-          {/* <CreatePost isOpen={isOpen} onClose={onClose} /> */}
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>

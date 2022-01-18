@@ -6,8 +6,14 @@ import { Route, Routes } from 'react-router-dom'
 import Feed from 'screens/Feed'
 import PostPage from 'screens/PostPage'
 import UserProfile from 'screens/UserProfile'
+import { useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 
 function AuthenticatedApp() {
+  const location = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location])
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <NavBar />
@@ -26,7 +32,7 @@ function AppRoutes() {
       <Route exact path='/' element={<Feed />} />
       <Route exact path='/post/:id' element={<PostPage />} />
       <Route exact path='/post/edit/:id' element={<PostPage />} />
-      <Route path='/profile/me' element={<UserProfile />} />
+      {/* <Route path='/profile/me' element={<UserProfile />} /> */}
       <Route path='/profile/:id' element={<UserProfile />} />
       {/* <Route path="*" element={<NotFoundScreen />} /> */}
     </Routes>

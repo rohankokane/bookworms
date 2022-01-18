@@ -2,6 +2,8 @@ import { List, ListItem } from '@chakra-ui/react'
 import Post from './Post'
 
 function PostsList({ posts }) {
+  if (!posts.length) return 'No posts'
+
   return (
     <>
       <List>

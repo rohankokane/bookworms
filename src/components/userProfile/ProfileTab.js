@@ -17,21 +17,28 @@ import {
 } from '@chakra-ui/react'
 import ProfileStat from './ProfileStat'
 
-function ProfileTab() {
+function ProfileTab({ profileData }) {
   const uidColSpan = useBreakpointValue({ base: 2, md: 1 })
   const avatarSize = useBreakpointValue({ base: 'xl', md: '2xl' })
   const statsBar = useBreakpointValue({ base: 'grid', md: 'none' })
   const statsMd = useBreakpointValue({ base: 'none', md: 'grid' })
-
   return (
     <Container p={0} size={{ base: 'full', md: 'container.md' }}>
-      <VStack align={'start'} spacing={4}>
-        <HStack align={'start'} w={'full'} spacing={6}>
-          <Avatar
-            size={avatarSize}
-            name='Dan Abrahmov'
-            src='https://bit.ly/dan-abramov'
-          />
+      <SimpleGrid
+        style={{ justifyItems: 'center', gridTemplateColumns: '1fr 3fr' }}
+      >
+        <Avatar
+          size={avatarSize}
+          name={profileData.fullname}
+          src='https://bit.ly/dan-abramov'
+        />
+        <HStack
+          paddingLeft={'4'}
+          marginTop={'4'}
+          align={'start'}
+          w={'full'}
+          spacing={6}
+        >
           <VStack
             spacing={'4'}
             align={'start'}
@@ -46,7 +53,7 @@ function ProfileTab() {
                 fontWeight={'hairline'}
                 // mb={2}
               >
-                User Id
+                {profileData.username}
               </Text>
               {/* </GridItem>
             <GridItem colSpan={1}> */}
@@ -56,22 +63,37 @@ function ProfileTab() {
               {/* </GridItem> */}
             </Stack>
 
-            <ProfileStat justifyItems={'start'} display={statsMd} />
+            <ProfileStat
+              statsData={{
+                followers: profileData.followers,
+                following: profileData.following,
+                postsCount: profileData.posts.length,
+              }}
+              justifyItems={'start'}
+              display={statsMd}
+            />
           </VStack>
         </HStack>
-        <VStack align={'start'} spacing={'3'}>
-          <Text fontSize={'sm'} fontWeight={'bold'}>
-            dan name
-          </Text>
-          <Text>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis,
-            mollitia.
+        <VStack marginY={'4'} spacing={'1'}>
+          <Text textAlign={'center'} fontSize={'md'} fontWeight={'bold'}>
+            {profileData.fullname}
           </Text>
         </VStack>
-        <Divider display={statsBar} />
-        <ProfileStat display={statsBar} />
+        <VStack w='full' textAlign={'left'} gridColumn={'1/3'} spacing={'1'}>
+          <Text>{profileData.bio}</Text>
+        </VStack>
+        <Divider my={4} display={statsBar} gridColumn={'1/3'} />
+        <ProfileStat
+          statsData={{
+            followers: profileData.followers,
+            following: profileData.following,
+            postsCount: profileData.posts.length,
+          }}
+          gridColumn={'1/3'}
+          display={statsBar}
+        />
         {/* <Divider /> */}
-      </VStack>
+      </SimpleGrid>
     </Container>
   )
 }

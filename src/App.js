@@ -1,12 +1,13 @@
 // import { lazy, Suspense } from 'react'
-import { useAuth } from 'context/authContext'
+import { useAuth } from 'hooks/auth-hook'
 import AuthenticatedApp from 'AuthenticatedApp'
 import UnauthenticatedApp from 'UnauthenticatedApp'
-
 // const AuthenticatedApp = lazy(() =>
 //   import(/* webpackPrefetch: true */ './AuthenticatedApp')
 // )
 // const UnauthenticatedApp = lazy(() => import('./UnauthenticatedApp'))
+
+let logoutTimer
 
 function App() {
   const { token } = useAuth()

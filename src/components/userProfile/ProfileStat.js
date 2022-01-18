@@ -1,30 +1,72 @@
-import { Box, Container, SimpleGrid, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Container,
+  HStack,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  SimpleGrid,
+  Text,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
+import SuggestionList from 'components/feed/SuggestionList'
+import { useState } from 'react'
 
-function ProfileStat(props) {
+function ProfileStat({ statsData, ...props }) {
+  const { followers, following, postsCount } = statsData
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [modalHeading, setModalHeading] = useState('')
+  const [modalList, setModalList] = useState([])
+  const openModal = (type) => {
+    if (type === 'follower') {
+      setModalHeading('Followers')
+      setModalList([...followers])
+    } else {
+      setModalHeading('Following')
+      setModalList([...following])
+    }
+    onOpen()
+  }
   return (
-    <Box w={'full'} maxW={'sm'}>
-      <SimpleGrid {...props} w={'full'} columns={3} spacing={3}>
-        <VStack spacing={1}>
-          <Text fontWeight={'bold'}>12</Text>
+    <Box {...props} w={'full'} maxW={'sm'}>
+      <SimpleGrid w={'full'} columns={3} spacing={3}>
+        <HStack spacing={'2'}>
+          <Text fontWeight={'bold'}>{postsCount}</Text>
           <Text fontSize={'sm'} color={'gray.600'}>
             posts
           </Text>
-        </VStack>
+        </HStack>
 
-        <VStack spacing={1}>
-          <Text fontWeight={'bold'}>12</Text>
+        <HStack onClick={openModal} spacing={1}>
+          <Text fontWeight={'bold'}>{followers?.length}</Text>
           <Text fontSize={'sm'} color={'gray.600'}>
             followers
           </Text>
-        </VStack>
+        </HStack>
 
-        <VStack spacing={1}>
-          <Text fontWeight={'bold'}>12</Text>
+        <HStack spacing={1}>
+          <Text fontWeight={'bold'}>{following?.length}</Text>
           <Text fontSize={'sm'} color={'gray.600'}>
-            folowing
+            following
           </Text>
-        </VStack>
+        </HStack>
       </SimpleGrid>
+      <Modal onClose={onClose} isOpen={isOpen} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{modalHeading}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <SuggestionList list={modalList} maxH='70vh' />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   )
 }

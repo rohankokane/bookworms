@@ -9,6 +9,18 @@ export const getPosts = createAsyncThunk('posts/getPosts', async (token) => {
   // write getBy /:uid
   return client('posts', { token })
 })
+export const getPostById = createAsyncThunk(
+  'posts/getPostById',
+  async ({ token, postId }) => {
+    return client(`posts/${postId}`, { token })
+  }
+)
+export const getPostsByUserId = createAsyncThunk(
+  'posts/getPostsByUserId',
+  async ({ token, userId }) => {
+    return client(`posts/user/${userId}`, { token })
+  }
+)
 export const createPost = createAsyncThunk(
   'posts/createPost',
   async (promise) => {
@@ -18,6 +30,13 @@ export const createPost = createAsyncThunk(
 // update with /:id
 export const updatePost = createAsyncThunk(
   'posts/updatePost',
+  async (promise) => {
+    return promise
+  }
+)
+// update with /:id
+export const deletePost = createAsyncThunk(
+  'posts/deletePost',
   async (promise) => {
     return promise
   }
@@ -55,6 +74,30 @@ const postsSlice = createSlice({
       state.status = STATUS_REJECTED
       state.error = action.payload.message
     })
+    builder.addCase(getPostById.pending, (state) => {
+      state.status = STATUS_PENDING
+      state.posts = []
+    })
+    builder.addCase(getPostById.fulfilled, (state, action) => {
+      state.status = STATUS_SUCCESS
+      state.posts = [action.payload.post]
+    })
+    builder.addCase(getPostById.rejected, (state, action) => {
+      state.status = STATUS_REJECTED
+      state.error = action.payload.message
+    })
+    builder.addCase(getPostsByUserId.pending, (state) => {
+      state.status = STATUS_PENDING
+      state.posts = []
+    })
+    builder.addCase(getPostsByUserId.fulfilled, (state, action) => {
+      state.status = STATUS_SUCCESS
+      state.posts = [...action.payload.posts]
+    })
+    builder.addCase(getPostsByUserId.rejected, (state, action) => {
+      state.status = STATUS_REJECTED
+      state.error = action.payload.message
+    })
     builder.addCase(createPost.pending, (state) => {
       state.status = STATUS_PENDING
     })
@@ -68,7 +111,7 @@ const postsSlice = createSlice({
     })
 
     builder.addCase(likePost.pending, (state, action) => {
-      console.log('PENDING', { action })
+      // console.log('PENDING', { action })
       state.status = STATUS_PENDING
       const { pid, isLiked, userId } = action.meta.arg
       let postIndex = state.posts.findIndex((post) => post.id === pid)
@@ -88,7 +131,7 @@ const postsSlice = createSlice({
       console.log(STATUS_SUCCESS, { action })
     })
     builder.addCase(likePost.rejected, (state, action) => {
-      console.log('REJECTED', action)
+      // console.log('REJECTED', action)
       state.status = STATUS_REJECTED
       const { pid, isLiked, userId } = action.meta.arg
       let postIndex = state.posts.findIndex((post) => post.id === pid)
@@ -105,7 +148,7 @@ const postsSlice = createSlice({
       }
     })
     builder.addCase(bookmarkPost.pending, (state, action) => {
-      console.log('PENDING', { action })
+      // console.log('PENDING', { action })
       state.status = STATUS_PENDING
       const { pid, isBookmarked, userId } = action.meta.arg
       let postIndex = state.posts.findIndex((post) => post.id === pid)
@@ -147,12 +190,25 @@ const postsSlice = createSlice({
     })
     builder.addCase(updatePost.fulfilled, (state, action) => {
       state.status = STATUS_SUCCESS
-      let postIndex = state.posts.findIndex(
-        (post) => post.id === action.payload.post.id
-      )
-      state.posts[postIndex] = { ...action.payload.post }
+      state.posts = [action.payload.post]
+      // let postIndex = state.posts.findIndex(
+      //   (post) => post.id === action.payload.post.id
+      // )
+      // state.posts[postIndex] = { ...action.payload.post }
     })
     builder.addCase(updatePost.rejected, (state, action) => {
+      state.status = STATUS_REJECTED
+      state.error = action.payload.message
+    })
+    builder.addCase(deletePost.pending, (state) => {
+      state.status = STATUS_PENDING
+    })
+    builder.addCase(deletePost.fulfilled, (state, action) => {
+      state.status = STATUS_SUCCESS
+      // navigate back (-1)
+      // navigate to feed / profile page
+    })
+    builder.addCase(deletePost.rejected, (state, action) => {
       state.status = STATUS_REJECTED
       state.error = action.payload.message
     })

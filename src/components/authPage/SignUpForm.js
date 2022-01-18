@@ -1,17 +1,12 @@
 import {
   Button,
   Divider,
-  FormControl,
-  FormErrorMessage,
   Heading,
-  Input,
-  InputRightElement,
   Spinner,
   Text,
+  useToast,
   VStack,
 } from '@chakra-ui/react'
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
-import { useState } from 'react'
 import SiteLogo from '../SiteLogo'
 import {
   VALIDATOR_EMAIL,
@@ -19,27 +14,16 @@ import {
   VALIDATOR_REQUIRE,
 } from 'utils/validators'
 import FormInput from 'components/Input'
-import { useForm } from 'hooks/form-hook'
-import { useClient } from 'hooks/client-hook'
-import { useAsync } from 'hooks/async-hook'
-import { useAuth } from 'context/authContext'
+import { prepareFormData, useForm } from 'hooks/form-hook'
+import { useDispatch } from 'react-redux'
+import { STATUS_PENDING } from 'utils/constants'
+import { signupUser } from 'store/userSlice'
 
-const isLoading = false
+let status = ''
 function SignUpForm({ setLoginMode }) {
-  const auth = useAuth()
-  const client = useClient()
-  const {
-    isIdle,
-    isLoading,
-    isError,
-    isSuccess,
-
-    setData,
-    error,
-    data,
-    run,
-    reset,
-  } = useAsync()
+  const toast = useToast()
+  const dispatch = useDispatch()
+  const isLoading = status === STATUS_PENDING
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -68,22 +52,17 @@ function SignUpForm({ setLoginMode }) {
   )
 
   const handleSignUp = async () => {
-    const signupData = {
-      email: formState.inputs.email.value,
-      password: formState.inputs.password.value,
-      username: formState.inputs.username.value,
-      fullname: formState.inputs.fullname.value,
-      bio: formState.inputs.bio.value,
-    }
-
-    console.log('signing up')
-    const resData = await run(
-      client('users/signup', {
-        data: signupData,
-        method: 'POST',
+    const signupData = prepareFormData(formState)
+    dispatch(signupUser(signupData)).catch((err) => {
+      toast({
+        title: 'Error occurred',
+        description: `${err.message} Please try again`,
+        status: 'error',
+        position: 'bottom-right',
+        duration: 5000,
+        isClosable: true,
       })
-    )
-    auth.login(resData.userId, resData.token)
+    })
   }
 
   return (

@@ -1,23 +1,29 @@
 import { VStack } from '@chakra-ui/react'
 import Post from 'components/feed/Post'
-import { useAsync } from 'hooks/async-hook'
-import { useClient } from 'hooks/client-hook'
+import { useAuth } from 'hooks/auth-hook'
 import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { getPostById } from 'store/postsSlice'
 
 function PostPage() {
-  // const postId = useParams()
-  // const post = useSelector((state) => state.posts)
-  // console.log({ post })
+  const { id } = useParams()
+  const { token } = useAuth()
+  const dispatch = useDispatch()
+  const { status, error, posts } = useSelector((state) => state.posts)
+  const post = posts[0]
+  let isLoading = status === 'pending'
+  let isIdle = status === null
 
-  // const client = useClient()
+  useEffect(() => {
+    dispatch(getPostById({ postId: id, token }))
+  }, [])
 
-  // const {data: post, isLoading, run } = useAsync()
-  // useEffect(()=>{
-  //   run(client('posts/${postId}'))
-  // })
-  return <VStack>{/* <Post post={post} /> */}</VStack>
+  return (
+    <VStack margin='0 auto' maxW={{ base: 'full', md: 'xl' }}>
+      {!post?.caption ? 'Loading...' : <Post post={post} />}
+    </VStack>
+  )
 }
 
 export default PostPage

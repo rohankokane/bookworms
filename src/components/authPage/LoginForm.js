@@ -7,19 +7,19 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import SiteLogo from '../SiteLogo'
-import { useForm } from 'hooks/form-hook'
+import { prepareFormData, useForm } from 'hooks/form-hook'
 import FormInput from '../Input'
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH } from 'utils/validators'
-import { useAuth } from 'context/authContext'
-import { useClient } from 'hooks/client-hook'
-import { useAsync } from 'hooks/async-hook'
-
+import { useDispatch } from 'react-redux'
+import { loginUser } from 'store/userSlice'
+import { useSelector } from 'react-redux'
+import { STATUS_PENDING } from 'utils/constants'
+let status = ''
 function LoginForm({ setLoginMode }) {
-  const auth = useAuth()
-  const client = useClient()
   const toast = useToast()
-  const { isIdle, isLoading, isError, isSuccess, error, data, run, reset } =
-    useAsync()
+  const dispatch = useDispatch()
+  // const { status } = useSelector((state) => state.user.status)
+  const isLoading = status === STATUS_PENDING
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -35,34 +35,18 @@ function LoginForm({ setLoginMode }) {
     false
   )
   const handleLogin = async () => {
-    const loginFormData = {
-      email: formState.inputs.email.value,
-      password: formState.inputs.password.value,
-    }
-
-    console.log('login in')
-    run(
-      client('users/login', {
-        data: loginFormData,
-        method: 'POST',
+    const loginFormData = prepareFormData(formState)
+    dispatch(loginUser({ data: loginFormData })).catch((err) => {
+      toast({
+        title: 'Error occurred',
+        description: `${err.message} Please try again`,
+        status: 'error',
+        position: 'bottom-right',
+        duration: 5000,
+        isClosable: true,
       })
-    )
-      .then((resData) => {
-        auth.login(resData.userId, resData.token)
-      })
-      .catch((err) => {
-        toast({
-          title: 'Error occurred',
-          description: `${err.message} Please try again`,
-          status: 'error',
-          position: 'bottom-right',
-          duration: 5000,
-          isClosable: true,
-        })
-      })
+    })
   }
-
-  // const {isLoading, isError, error, run} = useAsync()
 
   return (
     <VStack w='full' h='full' p={10} spacing={6} alignItems='center'>

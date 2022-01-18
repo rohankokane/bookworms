@@ -3,7 +3,7 @@ const apiURL = process.env.REACT_APP_API_URL
 async function client(
   endpoint,
   { data, token, headers: customHeaders, ...customConfig } = {},
-  logout
+  logoutCb
 ) {
   const config = {
     method: data ? 'POST' : 'GET',
@@ -22,8 +22,8 @@ async function client(
       if (response.status === 401) {
         // 401 = unauthorized request
         // clear redux store
+        logoutCb()
         console.error('401')
-        logout()
         // refresh the page for them
         window.location.assign(window.location)
         return Promise.reject({ message: 'Please re-authenticate.' })
