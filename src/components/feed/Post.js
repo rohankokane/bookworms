@@ -115,8 +115,20 @@ function Post({ post }) {
       my={4}
     >
       <Flex px='2' py='2' w='full' direction={'horizontal'} align={'center'}>
-        <Avatar size={'sm'} name={post.creator.username} src='' />
-        <Button variant={'link'} color={'gray.800'} mx='2' size={'sm'}>
+        <Avatar
+          size={'sm'}
+          name={post.creator.username}
+          src={post.creator?.image}
+        />
+        <Button
+          onClick={() => {
+            navigate(`/profile/${post.creator.id}`)
+          }}
+          variant={'link'}
+          color={'gray.800'}
+          mx='2'
+          size={'sm'}
+        >
           {post.creator.username || post.creator.fullname}
         </Button>
         <Spacer />

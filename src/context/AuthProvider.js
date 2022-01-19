@@ -41,7 +41,8 @@ function AuthProvider({ children }) {
   useEffect(() => {
     // set timer to automatically logout on token expiry
     if (token && tokenExpirationDate) {
-      const remainingTime = tokenExpirationDate.getTime() - new Date().getTime()
+      const remainingTime =
+        new Date(tokenExpirationDate).getTime() - new Date().getTime()
       logoutTimer = setTimeout(() => {
         dispatch(logout()).then(() => {
           toast({

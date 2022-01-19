@@ -11,6 +11,8 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Box,
+  useMediaQuery,
 } from '@chakra-ui/react'
 import IconBtn from './IconBtn'
 import SearchBox from './navBar/SearchBox'
@@ -19,12 +21,15 @@ import { AiFillHome, AiFillPlusCircle } from 'react-icons/ai'
 import { IoLogOut } from 'react-icons/io5'
 import CreatePostForm from './feed/CreatePostForm'
 import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { logout } from 'store/userSlice'
 
 function NavBar() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { username, fullname, image, userId } = useSelector(
+    (state) => state.user.user
+  )
   const onLogout = () => {
     dispatch(logout())
   }
@@ -34,6 +39,21 @@ function NavBar() {
     sm: 'none',
     md: 'block',
   })
+  const [isMobile] = useMediaQuery('(max-width: 700px)')
+  const getBoxStyle = () => {
+    if (!isMobile) return
+    return {
+      py: '3',
+      px: '2',
+      bgColor: 'white',
+      display: 'flex',
+      justifyContent: 'space-between',
+      w: 'full',
+      position: 'fixed',
+      bottom: '0',
+      left: '0',
+    }
+  }
 
   return (
     <nav>
@@ -65,51 +85,54 @@ function NavBar() {
           <Spacer />
           <SearchBox />
           <Spacer />
-          <Link tabIndex={-1} to='/'>
+          <Box {...getBoxStyle()}>
+            <Link tabIndex={-1} to='/'>
+              <IconBtn
+                // as={}
+                aria-label='go to home feed'
+                p={1}
+                color={'brand.500'}
+                mx={1}
+                icon={<AiFillHome />}
+              />
+            </Link>
             <IconBtn
-              // as={}
-              aria-label='go to home feed'
+              aria-label='create post'
               p={1}
               color={'brand.500'}
               mx={1}
-              icon={<AiFillHome />}
+              onClick={onOpen}
+              icon={<AiFillPlusCircle />}
             />
-          </Link>
-          <IconBtn
-            aria-label='create post'
-            p={1}
-            color={'brand.500'}
-            mx={1}
-            onClick={onOpen}
-            icon={<AiFillPlusCircle />}
-          />
-          <IconBtn
-            aria-label='Logout'
-            p={1}
-            color={'brand.500'}
-            mx={1}
-            onClick={onLogout}
-            icon={<IoLogOut />}
-          />
-          <IconBtn
-            aria-label='Logout'
-            p={1}
-            color={'brand.500'}
-            mx={1}
-            onClick={() => {
-              navigate('/profile/me')
-            }}
-            icon={
-              <Avatar
-                size={'sm'}
-                // mx={1}
-                // maxH={'1.75rem'}
-                // maxW={'1.75rem'}
-                name='Dan Abrahmov'
-                src='https://bit.ly/dan-abramov'
-              />
-            }
-          />
+            <IconBtn
+              aria-label='Logout'
+              p={1}
+              color={'brand.500'}
+              mx={1}
+              onClick={onLogout}
+              icon={<IoLogOut />}
+            />
+            <IconBtn
+              aria-label='Logout'
+              p={1}
+              color={'brand.500'}
+              mx={1}
+              onClick={() => {
+                navigate(`/profile/${userId}`)
+              }}
+              icon={
+                <Avatar
+                  size={'sm'}
+                  // mx={1}
+                  // maxH={'1.75rem'}
+                  // maxW={'1.75rem'}
+                  name={fullname}
+                  src={image}
+                />
+              }
+            />
+          </Box>
+
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>

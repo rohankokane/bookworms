@@ -14,10 +14,45 @@ import {
   Text,
   useBreakpointValue,
   VStack,
+  useDisclosure,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
 } from '@chakra-ui/react'
+import { useAuth } from 'hooks/auth-hook'
+import { useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import { followProfile } from 'store/userSlice'
+import EditProfile from './EditProfile'
+import ProfileButton from './ProfileButton'
 import ProfileStat from './ProfileStat'
 
 function ProfileTab({ profileData }) {
+  const { id } = useParams()
+  const { userId, token } = useAuth()
+  const dispatch = useDispatch()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  let isOwnProfile = id === userId
+  let isFollowed = false
+  if (!isOwnProfile) {
+    //or check if it's there in user's following
+    isFollowed = profileData.followers.some((p) => p.id === userId)
+  }
+  const onProfileButtonClick = () => {
+    if (isOwnProfile) {
+      //open modal edit form
+      onOpen()
+    } else {
+      //follow
+      console.log('HERE')
+      dispatch(followProfile({ userId, profileId: id, isFollowed, token }))
+    }
+  }
+
   const uidColSpan = useBreakpointValue({ base: 2, md: 1 })
   const avatarSize = useBreakpointValue({ base: 'xl', md: '2xl' })
   const statsBar = useBreakpointValue({ base: 'grid', md: 'none' })
@@ -30,7 +65,7 @@ function ProfileTab({ profileData }) {
         <Avatar
           size={avatarSize}
           name={profileData.fullname}
-          src='https://bit.ly/dan-abramov'
+          src={profileData?.image}
         />
         <HStack
           paddingLeft={'4'}
@@ -55,12 +90,11 @@ function ProfileTab({ profileData }) {
               >
                 {profileData.username}
               </Text>
-              {/* </GridItem>
-            <GridItem colSpan={1}> */}
-              <Button variant={'outline'} size={'md'} height={'7'}>
-                Follow
-              </Button>
-              {/* </GridItem> */}
+              <ProfileButton
+                onClick={onProfileButtonClick}
+                isFollowed={isFollowed}
+                isOwnProfile={isOwnProfile}
+              />
             </Stack>
 
             <ProfileStat
@@ -94,6 +128,24 @@ function ProfileTab({ profileData }) {
         />
         {/* <Divider /> */}
       </SimpleGrid>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit profile</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <EditProfile
+              initialData={{
+                fullname: profileData.fullname,
+                username: profileData.username,
+                bio: profileData.bio,
+                image: profileData?.image,
+              }}
+              onClose={onClose}
+            />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Container>
   )
 }

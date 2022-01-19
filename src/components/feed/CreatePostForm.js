@@ -4,6 +4,7 @@ import { useClient } from 'hooks/client-hook'
 import { useForm, prepareFormData } from 'hooks/form-hook'
 import { useDispatch } from 'react-redux'
 import { createPost } from 'store/postsSlice'
+import { VALIDATOR_MINLENGTH } from 'utils/validators'
 
 function CreatePostForm({ onClose }) {
   const dispatch = useDispatch()
@@ -33,6 +34,7 @@ function CreatePostForm({ onClose }) {
         onChange={inputHandler}
         type='textarea'
         rows='6'
+        validators={[VALIDATOR_MINLENGTH(6)]}
       />
       <Flex paddingY='2' w='full' justify='end'>
         <Button size='sm' onClick={() => handleCreatePost(formState)}>

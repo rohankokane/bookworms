@@ -1,8 +1,8 @@
-import { List, ListItem } from '@chakra-ui/react'
+import { Center, List, ListItem } from '@chakra-ui/react'
 import Post from './Post'
 
 function PostsList({ posts }) {
-  if (!posts.length) return 'No posts'
+  if (!posts.length) return <Center>'No posts'</Center>
 
   return (
     <>

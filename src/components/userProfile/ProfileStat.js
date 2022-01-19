@@ -43,14 +43,24 @@ function ProfileStat({ statsData, ...props }) {
           </Text>
         </HStack>
 
-        <HStack onClick={openModal} spacing={1}>
+        <HStack
+          onClick={() => {
+            openModal('follower')
+          }}
+          spacing={1}
+        >
           <Text fontWeight={'bold'}>{followers?.length}</Text>
           <Text fontSize={'sm'} color={'gray.600'}>
             followers
           </Text>
         </HStack>
 
-        <HStack spacing={1}>
+        <HStack
+          onClick={() => {
+            openModal('following')
+          }}
+          spacing={1}
+        >
           <Text fontWeight={'bold'}>{following?.length}</Text>
           <Text fontSize={'sm'} color={'gray.600'}>
             following

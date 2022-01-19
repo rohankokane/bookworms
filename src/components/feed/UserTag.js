@@ -1,14 +1,10 @@
 import { Avatar, Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 
 function UserTag({ profile }) {
-  console.log({ profile })
   return (
     <HStack>
-      <Avatar
-        size={'md'}
-        name={profile.fullname}
-        src='https://bit.ly/dan-abramov'
-      />
+      <Avatar size={'md'} name={profile.fullname} src={profile.image} />
       <VStack align={'start'} spacing={'0.5'}>
         <Button
           alignContent={'start'}
@@ -16,7 +12,9 @@ function UserTag({ profile }) {
           colorScheme={'black'}
           fontSize={'sm'}
         >
-          {profile.username}
+          <Link tabIndex={-1} to={`/profile/${profile.id}`}>
+            {profile.username}
+          </Link>
         </Button>
         <Text paddingLeft={'6px'} fontSize={'sm'}>
           {profile.fullname}

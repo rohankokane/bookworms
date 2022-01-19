@@ -13,18 +13,20 @@ function useProfile() {
   const { posts } = useSelector((state) => state.posts)
   const { userId, token } = useAuth()
   const { id } = useParams()
-  let uid = id
+  let uid
   useEffect(() => {
-    if (id === 'me') {
+    if (id === userId) {
+      // own profile , posts
       uid = userId
       setProfile(user)
     } else {
+      uid = id
       dispatch(getProfileData({ userId: uid, token })).then((data) => {
         setProfile({ ...data.payload })
       })
     }
     dispatch(getPostsByUserId({ userId: uid, token }))
-  }, [])
+  }, [user, id])
 
   return { profile, posts }
 }

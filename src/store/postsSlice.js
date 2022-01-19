@@ -128,7 +128,7 @@ const postsSlice = createSlice({
     })
     builder.addCase(likePost.fulfilled, (state, action) => {
       state.status = STATUS_SUCCESS
-      console.log(STATUS_SUCCESS, { action })
+      // console.log(STATUS_SUCCESS, { action })
     })
     builder.addCase(likePost.rejected, (state, action) => {
       // console.log('REJECTED', action)

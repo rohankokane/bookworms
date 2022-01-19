@@ -17,7 +17,7 @@ function AuthenticatedApp() {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <NavBar />
-      <Box bg={'#fafafa'} w={'full'} minH={'100vh'}>
+      <Box bg={'#fafafa'} pb={'10'} w={'full'} minH={'100vh'}>
         <Container variant={'mainContainer'} py={'4'} mt={'16'} as='main'>
           <AppRoutes />
         </Container>

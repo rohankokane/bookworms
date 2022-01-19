@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, current } from '@reduxjs/toolkit'
 import { removeAuth, saveAuth } from 'utils/auth'
 import { client } from 'utils/client'
 import {
@@ -14,7 +14,7 @@ export const loginUser = createAsyncThunk(
     if (userId && token) {
       return client(`users/${userId}`, { token }).then((userData) => {
         userData.token = token
-        userData.tokenExpirationDate = tokenExpirationDate
+        userData.tokenExpirationDate = tokenExpirationDate.toISOString()
         saveAuth(userData.userId, userData.token, tokenExpirationDate)
         return userData
       })
@@ -29,13 +29,16 @@ export const loginUser = createAsyncThunk(
         const tokenExpirationDate =
           expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60)
         saveAuth(userData.userId, userData.token, tokenExpirationDate)
-        return { ...userData, tokenExpirationDate }
+        return {
+          ...userData,
+          tokenExpirationDate: tokenExpirationDate.toISOString(),
+        }
       })
     }
   }
 )
 export const signupUser = createAsyncThunk('user/signup', async (data) => {
-  return client('users/signup', {
+  return client('user/signup', {
     data,
     method: 'POST',
   }).then((resData) => {
@@ -44,7 +47,10 @@ export const signupUser = createAsyncThunk('user/signup', async (data) => {
     const tokenExpirationDate =
       expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60)
     saveAuth(userData.userId, userData.token, tokenExpirationDate)
-    return { ...userData, tokenExpirationDate }
+    return {
+      ...userData,
+      tokenExpirationDate: tokenExpirationDate.toISOString(),
+    }
   })
 })
 export const getProfileData = createAsyncThunk(
@@ -60,13 +66,22 @@ export const getProfileData = createAsyncThunk(
 //     return client(`users/${uid}`, { token })
 //   }
 // )
-// // update with /:id
-// export const updateUser = createAsyncThunk(
-//   'user/updateUser',
-//   async (promise) => {
-//     return promise
-//   }
-// )
+// update with /:id
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async (promise) => {
+    return promise
+  }
+)
+export const followProfile = createAsyncThunk(
+  'user/followProfile',
+  async ({ profileId, userId, isFollowed, token }, thunkApi) => {
+    console.log('---->', thunkApi.getState())
+    return client(`users/${isFollowed ? 'un' : ''}follow/${profileId}`, {
+      token,
+    })
+  }
+)
 // export const followUser = createAsyncThunk(
 //   'profile/follow',
 //   async ({ pid, userId, isFollowed, token }) => {
@@ -95,90 +110,110 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(loginUser.pending, (state) => {
-      state.status = STATUS_PENDING
-    })
-    builder.addCase(loginUser.fulfilled, (state, action) => {
-      state.status = STATUS_SUCCESS
-      state.userId = action.payload.userId
-      state.token = action.payload.token
-      state.user = action.payload
-      state.tokenExpirationDate = action.payload.tokenExpirationDate
-    })
-    builder.addCase(loginUser.rejected, (state, action) => {
-      state.status = STATUS_REJECTED
-      state.error = action.payload.message
-    })
-    builder.addCase(signupUser.pending, (state) => {
-      state.status = STATUS_PENDING
-    })
-    builder.addCase(signupUser.fulfilled, (state, action) => {
-      state.status = STATUS_SUCCESS
-      state.userId = action.payload.userId
-      state.token = action.payload.token
-      state.user = action.payload
-      state.tokenExpirationDate = action.payload.tokenExpirationDate
-    })
-    builder.addCase(signupUser.rejected, (state, action) => {
-      state.status = STATUS_REJECTED
-      state.error = action.payload.message
-    })
-    builder.addCase(getProfileData.fulfilled, (state, { payload }) => {
-      state.currentProfile = payload
-    })
-    builder.addCase(getProfileData.rejected, (state, { payload }) => {
-      state.error = payload
-    })
+    builder
+      .addCase(loginUser.pending, (state) => {
+        state.status = STATUS_PENDING
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.status = STATUS_SUCCESS
+        state.userId = action.payload.userId
+        state.token = action.payload.token
+        state.user = action.payload
+        state.tokenExpirationDate = action.payload.tokenExpirationDate
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.status = STATUS_REJECTED
+        state.error = action.payload.message
+      })
+      .addCase(signupUser.pending, (state) => {
+        state.status = STATUS_PENDING
+      })
+      .addCase(signupUser.fulfilled, (state, action) => {
+        state.status = STATUS_SUCCESS
+        state.userId = action.payload.userId
+        state.token = action.payload.token
+        state.user = action.payload
+        state.tokenExpirationDate = action.payload.tokenExpirationDate
+      })
+      .addCase(signupUser.rejected, (state, action) => {
+        state.status = STATUS_REJECTED
+        state.error = action.payload.message
+      })
+      .addCase(getProfileData.fulfilled, (state, { payload }) => {
+        state.currentProfile = payload
+      })
+      .addCase(getProfileData.rejected, (state, { payload }) => {
+        state.error = payload
+      })
 
-    // builder.addCase(getUser.pending, (state) => {
+      .addCase(updateUser.pending, (state) => {
+        state.status = STATUS_PENDING
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.status = STATUS_SUCCESS
+        state.user = { ...state.user, ...action.payload.user }
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.status = STATUS_REJECTED
+        state.error = action.payload.message
+      })
+      .addCase(followProfile.pending, (state, action) => {
+        state.status = STATUS_PENDING
+
+        console.log('CURRENT STATE', current(state))
+      })
+      .addCase(followProfile.fulfilled, (state, action) => {
+        const { userId, profileId, isFollowed } = action.meta.arg
+        console.log('CURRENT STATE', current(state), action)
+        if (isFollowed) {
+          //unfollow
+          let unfollowedArrUser = state.user.following.filter(
+            (f) => f.id !== profileId
+          )
+          let unfollowedArrProfile = state.currentProfile.followers.filter(
+            (f) => f.id !== userId
+          )
+          state.user.following = [...unfollowedArrUser]
+          state.currentProfile.following = [...unfollowedArrProfile]
+        } else {
+          console.log(state)
+          //follow
+          state.user.following.push({
+            id: profileId,
+            fullname: state.currentProfile.fullname,
+            username: state.currentProfile.username,
+          })
+          state.currentProfile.followers.push({
+            id: userId,
+            fullname: state.user.fullname,
+            username: state.user.username,
+          })
+        }
+        state.status = STATUS_SUCCESS
+      })
+      .addCase(followProfile.rejected, (state, action) => {
+        state.status = STATUS_REJECTED
+        // const { profileId, isFollowed } = action.meta.arg
+        // if (!isFollowed) {
+        //   //unfollow
+        //   state.user.user.following?.filter((f) => f.id !== profileId)
+        // } else {
+        //   //follow
+        //   state.user.user.following.push(profileId)
+        // }
+        // state.error = action.payload.message
+      })
+    // builder.addCase(removeFromFollowing.pending, (state) => {
     //   state.status = STATUS_PENDING
+    //   state.user.user.following
     // })
-    // builder.addCase(getUser.fulfilled, (state, action) => {
+    // builder.addCase(removeFromFollowing.fulfilled, (state, action) => {
     //   state.status = STATUS_SUCCESS
-    //   state.user = action.payload.user
-
+    //   // state.user = { ...state.user, ...action.payload.user }
     // })
-    // builder.addCase(getUser.rejected, (state, action) => {
+    // builder.addCase(removeFromFollowing.rejected, (state, action) => {
     //   state.status = STATUS_REJECTED
     //   state.error = action.payload.message
-    // })
-
-    // builder.addCase(likeUser.pending, (state, action) => {
-    //   // console.log('PENDING', { action })
-    //   state.status = STATUS_PENDING
-    //   const { pid, isLiked, userId } = action.meta.arg
-    //   let postIndex = state.user.findIndex((post) => post.id === pid)
-    //   if (isLiked) {
-    //     //unlike
-    //     const unlikedArray = state.user[postIndex].likes.filter(
-    //       (id) => id !== userId
-    //     )
-    //     state.user[postIndex].likes = unlikedArray
-    //   } else {
-    //     // like
-    //     state.posts[postIndex].likes.push(userId)
-    //   }
-    // })
-    // builder.addCase(likeUser.fulfilled, (state, action) => {
-    //   state.status = STATUS_SUCCESS
-    //   console.log(STATUS_SUCCESS, { action })
-    // })
-    // builder.addCase(likeUser.rejected, (state, action) => {
-    //   // console.log('REJECTED', action)
-    //   state.status = STATUS_REJECTED
-    //   const { pid, isLiked, userId } = action.meta.arg
-    //   let postIndex = state.posts.findIndex((post) => post.id === pid)
-    //   // ! -> reverting the changes
-    //   if (!isLiked) {
-    //     //unlike
-    //     const unlikedArray = state.posts[postIndex].likes.filter(
-    //       (id) => id !== userId
-    //     )
-    //     state.posts[postIndex].likes = unlikedArray
-    //   } else {
-    //     // like
-    //     state.posts[postIndex].likes.push(userId)
-    //   }
     // })
   },
 })
