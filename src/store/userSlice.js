@@ -25,7 +25,7 @@ export const loginUser = createAsyncThunk(
         method: 'POST',
       }).then((resData) => {
         const { expirationDate, ...userData } = resData
-        console.log('login User', resData)
+
         const tokenExpirationDate =
           expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60)
         saveAuth(userData.userId, userData.token, tokenExpirationDate)
@@ -43,7 +43,7 @@ export const signupUser = createAsyncThunk('user/signup', async (data) => {
     method: 'POST',
   }).then((resData) => {
     const { expirationDate, ...userData } = resData
-    console.log('signup User', resData)
+
     const tokenExpirationDate =
       expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60)
     saveAuth(userData.userId, userData.token, tokenExpirationDate)
@@ -59,13 +59,7 @@ export const getProfileData = createAsyncThunk(
     return client(`users/${userId}`, { token })
   }
 )
-// export const
-// export const getUser = createAsyncThunk(
-//   'user/getUser',
-//   async ({ uid, token }) => {
-//     return client(`users/${uid}`, { token })
-//   }
-// )
+
 // update with /:id
 export const updateUser = createAsyncThunk(
   'user/updateUser',
@@ -76,18 +70,11 @@ export const updateUser = createAsyncThunk(
 export const followProfile = createAsyncThunk(
   'user/followProfile',
   async ({ profileId, userId, isFollowed, token }, thunkApi) => {
-    console.log('---->', thunkApi.getState())
     return client(`users/${isFollowed ? 'un' : ''}follow/${profileId}`, {
       token,
     })
   }
 )
-// export const followUser = createAsyncThunk(
-//   'profile/follow',
-//   async ({ pid, userId, isFollowed, token }) => {
-//     return client(`user/${isFollowed ? 'un' : ''}like/${pid}`, { token })
-//   }
-// )
 
 const userSlice = createSlice({
   name: 'user',
@@ -159,12 +146,10 @@ const userSlice = createSlice({
       })
       .addCase(followProfile.pending, (state, action) => {
         state.status = STATUS_PENDING
-
-        console.log('CURRENT STATE', current(state))
       })
       .addCase(followProfile.fulfilled, (state, action) => {
         const { userId, profileId, isFollowed } = action.meta.arg
-        console.log('CURRENT STATE', current(state), action)
+
         if (isFollowed) {
           //unfollow
           let unfollowedArrUser = state.user.following.filter(
@@ -176,7 +161,6 @@ const userSlice = createSlice({
           state.user.following = [...unfollowedArrUser]
           state.currentProfile.following = [...unfollowedArrProfile]
         } else {
-          console.log(state)
           //follow
           state.user.following.push({
             id: profileId,
@@ -203,18 +187,6 @@ const userSlice = createSlice({
         // }
         // state.error = action.payload.message
       })
-    // builder.addCase(removeFromFollowing.pending, (state) => {
-    //   state.status = STATUS_PENDING
-    //   state.user.user.following
-    // })
-    // builder.addCase(removeFromFollowing.fulfilled, (state, action) => {
-    //   state.status = STATUS_SUCCESS
-    //   // state.user = { ...state.user, ...action.payload.user }
-    // })
-    // builder.addCase(removeFromFollowing.rejected, (state, action) => {
-    //   state.status = STATUS_REJECTED
-    //   state.error = action.payload.message
-    // })
   },
 })
 export const { logout } = userSlice.actions

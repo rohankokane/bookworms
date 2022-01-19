@@ -5,7 +5,7 @@ import useProfile from 'hooks/profile-hook'
 let isLoading = true
 function UserProfile() {
   const { profile: profileData, posts } = useProfile()
-  // console.log({ profile: profileData, posts })
+  //
   isLoading = !profileData?.id.length
 
   if (isLoading) return 'loading'

@@ -48,7 +48,7 @@ function ProfileTab({ profileData }) {
       onOpen()
     } else {
       //follow
-      console.log('HERE')
+
       dispatch(followProfile({ userId, profileId: id, isFollowed, token }))
     }
   }

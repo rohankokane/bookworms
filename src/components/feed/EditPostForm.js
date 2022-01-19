@@ -19,7 +19,6 @@ function EditPostForm({ initialCaption, postId, onEditMode }) {
   )
   const handleUpdatePost = async (data) => {
     const dataToSend = prepareFormData(data)
-    console.log({ dataToSend })
     dispatch(
       updatePost(
         client(`posts/${postId}`, { method: 'PATCH', data: dataToSend })

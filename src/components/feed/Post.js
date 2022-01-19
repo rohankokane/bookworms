@@ -53,24 +53,20 @@ function Post({ post }) {
   let isUserPost = post.creator?.id === userId || post.creator === userId
 
   const onClickLike = () => {
-    console.log(`Clicked like: ${userId}`)
     if (likeRequestPending) {
-      console.log('Request already pending! Do nothing.')
       return
     }
-    console.log(`Update state: ${userId}`)
+
     dispatch(likePost({ pid: post.id, userId, isLiked, token })).then(() => {
       likeRequestPending = false
     })
     likeRequestPending = true
   }
   const onClickBookmark = () => {
-    console.log(`Clicked isBookmarked: ${userId}`)
     if (bookmarkRequestPending) {
-      console.log('Request already pending! Do nothing.')
       return
     }
-    console.log(`Update state: ${userId}`)
+
     dispatch(bookmarkPost({ pid: post.id, userId, isBookmarked, token })).then(
       () => {
         bookmarkRequestPending = false
@@ -79,7 +75,6 @@ function Post({ post }) {
     bookmarkRequestPending = true
   }
   const onOpenPostClick = () => {
-    console.log('navigating')
     if (isInFeed) {
       navigate(`/post/${post.id}`)
     } else {
@@ -92,7 +87,7 @@ function Post({ post }) {
   const onDeletePost = () => {
     if (!isUserPost) return
     // const dataToSend = prepareFormData(data)
-    // console.log({ dataToSend })
+    //
     dispatch(deletePost(client(`posts/${post.id}`, { method: 'DELETE' }))).then(
       () => {
         navigate(-1)

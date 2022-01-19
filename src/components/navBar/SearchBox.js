@@ -19,9 +19,7 @@ function SearchBox() {
         <Box w='xs'>
           <PopoverTrigger>
             <FormInput
-              onChange={(a, n) => {
-                console.log(a, n)
-              }}
+              onChange={(a, n) => {}}
               size={'sm'}
               id='search'
               type='text'

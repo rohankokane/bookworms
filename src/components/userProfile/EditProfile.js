@@ -40,7 +40,7 @@ function EditProfile({ initialData, onClose }) {
 
   const handleUpdateProfile = async (data) => {
     const dataToSend = prepareFormData(data)
-    console.log({ dataToSend })
+
     // return
     dispatch(
       updateUser(
