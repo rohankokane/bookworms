@@ -20,8 +20,12 @@ function CreatePostForm({ onClose }) {
     false
   )
   const handleCreatePost = async (data) => {
+    // console.log(data)
     const dataToSend = prepareFormData(data)
-    dispatch(createPost(client('posts', { data: dataToSend }))).then(() => {
+    // console.log(dataToSend)
+    dispatch(
+      createPost(client('posts', { data: dataToSend, method: 'POST' }))
+    ).then(() => {
       onClose()
     })
   }

@@ -43,7 +43,7 @@ function Sidebar() {
         </HStack>
         <Divider style={{ margin: '1rem 0 0.5rem' }} />
         <Text textAlign={'center'} fontSize='sm' color='gray.600'>
-          Suggestions for you
+          New members
         </Text>
         {isLoading ? (
           'Loading...'

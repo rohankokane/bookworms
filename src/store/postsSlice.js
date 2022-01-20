@@ -110,7 +110,6 @@ const postsSlice = createSlice({
         state.status = STATUS_REJECTED
         state.error = action.payload.message
       })
-
       .addCase(likePost.pending, (state, action) => {
         //
         state.status = STATUS_PENDING

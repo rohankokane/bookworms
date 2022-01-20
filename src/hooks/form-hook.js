@@ -36,7 +36,7 @@ const formReducer = (state, action) => {
 }
 
 export const prepareFormData = (stateData) => {
-  if (!stateData.isValid) return
+  // if (!stateData.isValid) return
   let data = {}
   for (const key in stateData.inputs) {
     data[key] = stateData.inputs[key].value
