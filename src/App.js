@@ -7,8 +7,6 @@ import UnauthenticatedApp from 'UnauthenticatedApp'
 // )
 // const UnauthenticatedApp = lazy(() => import('./UnauthenticatedApp'))
 
-let logoutTimer
-
 function App() {
   const { token } = useAuth()
   return (
