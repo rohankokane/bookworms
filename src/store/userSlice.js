@@ -38,6 +38,7 @@ export const loginUser = createAsyncThunk(
   }
 )
 export const signupUser = createAsyncThunk('user/signup', async (data) => {
+  // signup
   return client('users/signup', {
     data,
     method: 'POST',
