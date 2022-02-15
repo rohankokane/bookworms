@@ -74,15 +74,6 @@ function LoginForm({ setLoginMode }) {
 
         <VStack w={'full'} alignItems='flex-start' spacing={4}>
           <Button
-            aria-label='login as a test user'
-            disabled={isLoading}
-            w='full'
-            variant={'outline'}
-          >
-            Login as a test user
-            {isLoading ? <Spinner css={{ marginLeft: 5 }} /> : null}
-          </Button>
-          <Button
             aria-label='login'
             disabled={!formState.isValid || isLoading}
             w='full'

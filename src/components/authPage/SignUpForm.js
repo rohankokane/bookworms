@@ -54,6 +54,7 @@ function SignUpForm({ setLoginMode }) {
   const handleSignUp = async () => {
     const signupData = prepareFormData(formState)
     dispatch(signupUser(signupData)).catch((err) => {
+      console.log(err)
       toast({
         title: 'Error occurred',
         description: `${err.message} Please try again`,
