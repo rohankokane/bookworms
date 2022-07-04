@@ -34,13 +34,17 @@ function LoginForm({ setLoginMode }) {
     },
     false
   )
-  const handleLogin = async () => {
-    const loginFormData = prepareFormData(formState)
+  const handleLogin = async (data) => {
+    let loginFormData
+
+    if (data === undefined) loginFormData = prepareFormData(formState)
+    else loginFormData = prepareFormData(data)
+
     dispatch(loginUser({ data: loginFormData }))
       .then((action) => {
         if (!action.error) return
         toast({
-          title: 'Error occurred!',
+          title: 'Error occurred',
           description: `${action?.error?.message} Please try again`,
           status: 'error',
           position: 'bottom-right',
@@ -50,7 +54,7 @@ function LoginForm({ setLoginMode }) {
       })
       .catch((action) => {
         toast({
-          title: 'Error occurred!',
+          title: 'Error occurred',
           description: `${action?.error?.message} Please try again`,
           status: 'error',
           position: 'bottom-right',
@@ -58,6 +62,21 @@ function LoginForm({ setLoginMode }) {
           isClosable: true,
         })
       })
+  }
+  const guestLogin = () => {
+    handleLogin({
+      inputs: {
+        email: {
+          value: 'guest@gmail.com',
+          isValid: true,
+        },
+        password: {
+          value: '123456',
+          isValid: true,
+        },
+      },
+      isValid: true,
+    })
   }
 
   return (
@@ -85,6 +104,16 @@ function LoginForm({ setLoginMode }) {
         </VStack>
 
         <VStack w={'full'} alignItems='flex-start' spacing={4}>
+          <Button
+            aria-label='guest login'
+            disabled={isLoading}
+            w='full'
+            variant={'outline'}
+            onClick={guestLogin}
+          >
+            Login as a Guest User
+            {isLoading ? <Spinner css={{ marginLeft: 5 }} /> : null}
+          </Button>
           <Button
             aria-label='login'
             disabled={!formState.isValid || isLoading}
