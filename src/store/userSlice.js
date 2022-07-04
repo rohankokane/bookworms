@@ -12,28 +12,36 @@ export const loginUser = createAsyncThunk(
   async ({ userId, token, tokenExpirationDate, data }) => {
     // login existing logged in user
     if (userId && token) {
-      return client(`users/${userId}`, { token }).then((userData) => {
-        userData.token = token
-        userData.tokenExpirationDate = tokenExpirationDate.toISOString()
-        saveAuth(userData.userId, userData.token, tokenExpirationDate)
-        return userData
-      })
+      return client(`users/${userId}`, { token })
+        .then((userData) => {
+          userData.token = token
+          userData.tokenExpirationDate = tokenExpirationDate.toISOString()
+          saveAuth(userData.userId, userData.token, tokenExpirationDate)
+          return userData
+        })
+        .catch((e) => {
+          throw new Error(e)
+        })
     } else {
       // login on form submit
       return client('users/login', {
         data,
         method: 'POST',
-      }).then((resData) => {
-        const { expirationDate, ...userData } = resData
-
-        const tokenExpirationDate =
-          expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60)
-        saveAuth(userData.userId, userData.token, tokenExpirationDate)
-        return {
-          ...userData,
-          tokenExpirationDate: tokenExpirationDate.toISOString(),
-        }
       })
+        .then((resData) => {
+          const { expirationDate, ...userData } = resData
+
+          const tokenExpirationDate =
+            expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60)
+          saveAuth(userData.userId, userData.token, tokenExpirationDate)
+          return {
+            ...userData,
+            tokenExpirationDate: tokenExpirationDate.toISOString(),
+          }
+        })
+        .catch((e) => {
+          throw new Error(e)
+        })
     }
   }
 )
@@ -100,18 +108,24 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => {
+        console.log('PENDING', state)
         state.status = STATUS_PENDING
+        state.error = null
       })
       .addCase(loginUser.fulfilled, (state, action) => {
+        console.log('FULFILLED', state, action)
         state.status = STATUS_SUCCESS
         state.userId = action.payload.userId
         state.token = action.payload.token
         state.user = action.payload
         state.tokenExpirationDate = action.payload.tokenExpirationDate
+        state.error = null
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = STATUS_REJECTED
-        state.error = action.payload.message
+        console.log('REJECTED', state, action.error.message)
+
+        state.error = action.error.message
       })
       .addCase(signupUser.pending, (state) => {
         state.status = STATUS_PENDING

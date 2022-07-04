@@ -33,8 +33,12 @@ async function client(
       if (response.ok) {
         return data
       } else {
-        return Promise.reject(data)
+        throw new Error(data)
+        // return Promise.reject(data)
       }
+    })
+    .catch((e) => {
+      throw new Error(e)
     })
 }
 

@@ -14,11 +14,11 @@ import { useDispatch } from 'react-redux'
 import { loginUser } from 'store/userSlice'
 import { useSelector } from 'react-redux'
 import { STATUS_PENDING } from 'utils/constants'
-let status = ''
+
 function LoginForm({ setLoginMode }) {
   const toast = useToast()
   const dispatch = useDispatch()
-  // const { status } = useSelector((state) => state.user.status)
+  const { status, error } = useSelector((state) => state.user)
   const isLoading = status === STATUS_PENDING
 
   const [formState, inputHandler, setFormData] = useForm(
@@ -36,16 +36,28 @@ function LoginForm({ setLoginMode }) {
   )
   const handleLogin = async () => {
     const loginFormData = prepareFormData(formState)
-    dispatch(loginUser({ data: loginFormData })).catch((err) => {
-      toast({
-        title: 'Error occurred',
-        description: `${err.message} Please try again`,
-        status: 'error',
-        position: 'bottom-right',
-        duration: 5000,
-        isClosable: true,
+    dispatch(loginUser({ data: loginFormData }))
+      .then((action) => {
+        if (!action.error) return
+        toast({
+          title: 'Error occurred!',
+          description: `${action?.error?.message} Please try again`,
+          status: 'error',
+          position: 'bottom-right',
+          duration: 5000,
+          isClosable: true,
+        })
       })
-    })
+      .catch((action) => {
+        toast({
+          title: 'Error occurred!',
+          description: `${action?.error?.message} Please try again`,
+          status: 'error',
+          position: 'bottom-right',
+          duration: 5000,
+          isClosable: true,
+        })
+      })
   }
 
   return (
