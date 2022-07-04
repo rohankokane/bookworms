@@ -1,10 +1,11 @@
-import { VStack } from '@chakra-ui/react'
+import { Spinner, VStack } from '@chakra-ui/react'
 import Post from 'components/feed/Post'
 import { useAuth } from 'hooks/auth-hook'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { getPostById } from 'store/postsSlice'
+import LoadingScreen from './LoadingScreen'
 
 function PostPage() {
   const { id } = useParams()
@@ -18,7 +19,7 @@ function PostPage() {
   useEffect(() => {
     dispatch(getPostById({ postId: id, token }))
   }, [])
-
+  if (isLoading) return <LoadingScreen />
   return (
     <VStack margin='0 auto' maxW={{ base: 'full', md: 'xl' }}>
       {!post?.caption ? 'Loading...' : <Post post={post} />}

@@ -112,7 +112,7 @@ const postsSlice = createSlice({
       })
       .addCase(likePost.pending, (state, action) => {
         //
-        state.status = STATUS_PENDING
+        // state.status = STATUS_PENDING
         const { pid, isLiked, userId } = action.meta.arg
         let postIndex = state.posts.findIndex((post) => post.id === pid)
         if (isLiked) {
@@ -149,7 +149,7 @@ const postsSlice = createSlice({
       })
       .addCase(bookmarkPost.pending, (state, action) => {
         //
-        state.status = STATUS_PENDING
+        // state.status = STATUS_PENDING
         const { pid, isBookmarked, userId } = action.meta.arg
         let postIndex = state.posts.findIndex((post) => post.id === pid)
         if (isBookmarked) {

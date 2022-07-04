@@ -112,7 +112,7 @@ function Post({ post }) {
       <Flex px='2' py='2' w='full' direction={'horizontal'} align={'center'}>
         <Avatar
           size={'sm'}
-          name={post.creator.username}
+          name={post.creator.fullname}
           src={post.creator?.image}
         />
         <Button

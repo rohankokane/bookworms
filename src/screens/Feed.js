@@ -6,6 +6,7 @@ import { useAuth } from 'hooks/auth-hook'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { getPosts } from 'store/postsSlice'
+import LoadingScreen from './LoadingScreen'
 
 function Feed() {
   const { status, error, posts } = useSelector((state) => state.posts)
@@ -23,6 +24,9 @@ function Feed() {
   })
   const sideBarColSpan = useBreakpointValue({ base: 0, sm: 0, md: 1 })
   const feedColSpan = useBreakpointValue({ base: 3, sm: 3, md: 2 })
+
+  let isLoading = status === 'pending'
+  if (isLoading) return <LoadingScreen />
 
   return (
     <Grid templateColumns='repeat(3,1fr)' gap={8}>
