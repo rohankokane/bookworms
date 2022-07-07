@@ -2,7 +2,7 @@ import { useToast } from '@chakra-ui/react'
 import { useAuth } from 'hooks/auth-hook'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { loginUser, logout } from 'store/userSlice'
+import { loginUser, logOut, logout } from 'store/userSlice'
 
 const LOCALSTORAGE_KEY = process.env.REACT_APP_LOCALSTORAGE_KEY
 let logoutTimer
@@ -44,10 +44,11 @@ function AuthProvider({ children }) {
       const remainingTime =
         new Date(tokenExpirationDate).getTime() - new Date().getTime()
       logoutTimer = setTimeout(() => {
-        dispatch(logout()).then(() => {
+        dispatch(logOut()).then(() => {
+          console.log('LOGGED OUT, TIME UP')
           toast({
             title: 'Logged out',
-            description: `Please kindly re-login`,
+            description: `You session has expired, please re-login`,
             status: 'info',
             position: 'bottom-right',
             duration: null,

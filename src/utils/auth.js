@@ -14,4 +14,5 @@ export const saveAuth = (uid, token, tokenExpirationDate) => {
 
 export const removeAuth = () => {
   localStorage.removeItem(LOCALSTORAGE_KEY)
+  return Promise.resolve()
 }

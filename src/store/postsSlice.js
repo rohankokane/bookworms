@@ -50,8 +50,8 @@ export const likePost = createAsyncThunk(
 )
 export const bookmarkPost = createAsyncThunk(
   'posts/bookmarkPost',
-  async ({ pid, userId, isLiked, token }) => {
-    return client(`posts/${isLiked ? 'un' : ''}bookmark/${pid}`, { token })
+  async ({ pid, userId, isBookmarked, token }) => {
+    return client(`posts/${isBookmarked ? 'un' : ''}bookmark/${pid}`, { token })
   }
 )
 

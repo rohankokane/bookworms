@@ -48,7 +48,7 @@ function LoginForm({ setLoginMode }) {
           description: `${action?.error?.message} Please try again`,
           status: 'error',
           position: 'bottom-right',
-          duration: 5000,
+          duration: null,
           isClosable: true,
         })
       })

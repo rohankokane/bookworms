@@ -22,7 +22,7 @@ import { IoLogOut } from 'react-icons/io5'
 import CreatePostForm from './feed/CreatePostForm'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { logout } from 'store/userSlice'
+import { logOut, logout } from 'store/userSlice'
 
 function NavBar() {
   const navigate = useNavigate()
@@ -31,7 +31,7 @@ function NavBar() {
     (state) => state.user.user
   )
   const onLogout = () => {
-    dispatch(logout())
+    dispatch(logOut())
   }
   const { isOpen, onOpen, onClose } = useDisclosure()
   const logoDisplay = useBreakpointValue({

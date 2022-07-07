@@ -26,12 +26,11 @@ function Feed() {
   const feedColSpan = useBreakpointValue({ base: 3, sm: 3, md: 2 })
 
   let isLoading = status === 'pending'
-  if (isLoading) return <LoadingScreen />
 
   return (
     <Grid templateColumns='repeat(3,1fr)' gap={8}>
       <GridItem colSpan={feedColSpan}>
-        <PostsList posts={posts} />
+        {isLoading ? <LoadingScreen /> : <PostsList posts={posts} />}
       </GridItem>
       <GridItem
         display={sideBarDisplay}

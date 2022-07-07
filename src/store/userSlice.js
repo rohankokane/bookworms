@@ -12,7 +12,7 @@ export const loginUser = createAsyncThunk(
   async ({ userId, token, tokenExpirationDate, data }) => {
     // login existing logged in user
     if (userId && token) {
-      return client(`users/${userId}`, { token })
+      return client(`users/bootstrap/${userId}`, { token })
         .then((userData) => {
           userData.token = token
           userData.tokenExpirationDate = tokenExpirationDate.toISOString()
@@ -85,6 +85,7 @@ export const followProfile = createAsyncThunk(
     })
   }
 )
+export const logOut = createAsyncThunk('user/logout', async () => removeAuth())
 
 const userSlice = createSlice({
   name: 'user',
@@ -97,15 +98,7 @@ const userSlice = createSlice({
     error: null,
     currentProfile: {},
   },
-  reducers: {
-    logout: (state) => {
-      removeAuth()
-      state.token = null
-      state.tokenExpirationDate = null
-      state.userId = null
-      state.user = {}
-    },
-  },
+  // reducers: {  },
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => {
@@ -127,6 +120,12 @@ const userSlice = createSlice({
         console.log('REJECTED', state, action.error.message)
 
         state.error = action.error.message
+      })
+      .addCase(logOut.fulfilled, (state) => {
+        state.token = null
+        state.tokenExpirationDate = null
+        state.userId = null
+        state.user = {}
       })
       .addCase(signupUser.pending, (state) => {
         state.status = STATUS_PENDING
@@ -205,6 +204,6 @@ const userSlice = createSlice({
       })
   },
 })
-export const { logout } = userSlice.actions
+// export const { logout } = userSlice.actions
 
 export default userSlice.reducer
