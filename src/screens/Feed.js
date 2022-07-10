@@ -1,7 +1,5 @@
 import { useEffect } from 'react'
-import { Grid, GridItem, useBreakpointValue } from '@chakra-ui/react'
 import PostsList from 'components/feed/PostsList'
-import Sidebar from 'components/feed/Sidebar'
 import { useAuth } from 'hooks/auth-hook'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
@@ -17,30 +15,9 @@ function Feed() {
     dispatch(getPosts(token))
   }, [])
 
-  const sideBarDisplay = useBreakpointValue({
-    base: 'none',
-    sm: 'none',
-    md: 'block',
-  })
-  const sideBarColSpan = useBreakpointValue({ base: 0, sm: 0, md: 1 })
-  const feedColSpan = useBreakpointValue({ base: 3, sm: 3, md: 2 })
-
   let isLoading = status === 'pending'
 
-  return (
-    <Grid templateColumns='repeat(3,1fr)' gap={8}>
-      <GridItem colSpan={feedColSpan}>
-        {isLoading ? <LoadingScreen /> : <PostsList posts={posts} />}
-      </GridItem>
-      <GridItem
-        display={sideBarDisplay}
-        style={{ position: 'sticky', top: '80px', height: '80vh' }}
-        colSpan={sideBarColSpan}
-      >
-        <Sidebar />
-      </GridItem>
-    </Grid>
-  )
+  return isLoading ? <LoadingScreen /> : <PostsList posts={posts} />
 }
 
 export default Feed

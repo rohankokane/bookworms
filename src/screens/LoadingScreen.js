@@ -5,7 +5,7 @@ const LoadingScreen = () => {
     <div
       style={{
         width: '100%',
-        minHeight: '400px',
+        minHeight: '300px',
         display: 'flex',
         justifyContent: 'center',
         paddingTop: '5rem',

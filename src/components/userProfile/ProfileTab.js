@@ -21,6 +21,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  useToast,
 } from '@chakra-ui/react'
 import { useAuth } from 'hooks/auth-hook'
 import { useDispatch } from 'react-redux'
@@ -30,11 +31,12 @@ import EditProfile from './EditProfile'
 import ProfileButton from './ProfileButton'
 import ProfileStat from './ProfileStat'
 
-function ProfileTab({ profileData }) {
+function ProfileTab({ profileData, postsCount }) {
   const { id } = useParams()
   const { userId, token } = useAuth()
   const dispatch = useDispatch()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const toast = useToast()
 
   let isOwnProfile = id === userId
   let isFollowed = false
@@ -49,7 +51,18 @@ function ProfileTab({ profileData }) {
     } else {
       //follow
 
-      dispatch(followProfile({ userId, profileId: id, isFollowed, token }))
+      dispatch(
+        followProfile({ userId, profileId: id, isFollowed, token })
+      ).catch((action) => {
+        toast({
+          title: 'Error occurred',
+          description: `${action?.error?.message} Please try again`,
+          status: 'error',
+          position: 'bottom-right',
+          duration: 5000,
+          isClosable: true,
+        })
+      })
     }
   }
 
@@ -101,7 +114,7 @@ function ProfileTab({ profileData }) {
               statsData={{
                 followers: profileData.followers,
                 following: profileData.following,
-                postsCount: profileData.posts.length,
+                postsCount,
               }}
               justifyItems={'start'}
               display={statsMd}
@@ -121,7 +134,7 @@ function ProfileTab({ profileData }) {
           statsData={{
             followers: profileData.followers,
             following: profileData.following,
-            postsCount: profileData.posts.length,
+            postsCount,
           }}
           gridColumn={'1/3'}
           display={statsBar}

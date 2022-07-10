@@ -48,7 +48,7 @@ function AuthProvider({ children }) {
           console.log('LOGGED OUT, TIME UP')
           toast({
             title: 'Logged out',
-            description: `You session has expired, please re-login`,
+            description: `You session has expired, please login again`,
             status: 'info',
             position: 'bottom-right',
             duration: null,

@@ -69,7 +69,7 @@ function ProfileStat({ statsData, ...props }) {
       </SimpleGrid>
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent paddingBottom={'3'}>
           <ModalHeader>{modalHeading}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

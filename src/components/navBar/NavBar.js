@@ -14,12 +14,12 @@ import {
   Box,
   useMediaQuery,
 } from '@chakra-ui/react'
-import IconBtn from './IconBtn'
-import SearchBox from './navBar/SearchBox'
-import SiteLogo from './SiteLogo'
+import IconBtn from '../IconBtn'
+import SearchBox from './SearchBox'
+import SiteLogo from '../SiteLogo'
 import { AiFillHome, AiFillPlusCircle } from 'react-icons/ai'
 import { IoLogOut } from 'react-icons/io5'
-import CreatePostForm from './feed/CreatePostForm'
+import CreatePostForm from '../feed/CreatePostForm'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logOut, logout } from 'store/userSlice'

@@ -32,7 +32,7 @@ const brandRing = {
   },
 }
 
-export const Button = {
+const Button = {
   baseStyle: {
     borderRadius: 'md',
     ...brandRing,
@@ -56,7 +56,7 @@ const Heading = {
 const Container = {
   variants: {
     mainContainer: {
-      maxWidth: ['full', '600px', '900px', '900px', '950px'],
+      maxWidth: ['full', '600px', '900px', '900px', '1200px'],
     },
   },
 }
@@ -73,12 +73,26 @@ const Avatar = {
   },
 }
 
+const Input = {
+  variants: {
+    flushed: {
+      field: {
+        _focus: {
+          borderColor: 'brand.500',
+          boxShadow: `0px 1px 0px 0px #3F51B5`,
+        },
+      },
+    },
+  },
+}
+
 const components = {
   Button,
   Heading,
   Container,
   Divider,
   Avatar,
+  Input,
 }
 export const theme = extendTheme(
   {

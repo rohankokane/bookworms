@@ -98,7 +98,12 @@ const userSlice = createSlice({
     error: null,
     currentProfile: {},
   },
-  // reducers: {  },
+  reducers: {
+    currentUserProfile: (state) => {
+      state.currentProfile = state.user
+      state.currentProfile.status = STATUS_SUCCESS
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => {
@@ -141,11 +146,16 @@ const userSlice = createSlice({
         state.status = STATUS_REJECTED
         state.error = action.payload.message
       })
+      .addCase(getProfileData.pending, (state, { payload }) => {
+        state.currentProfile.status = STATUS_PENDING
+      })
       .addCase(getProfileData.fulfilled, (state, { payload }) => {
         state.currentProfile = payload
+        state.currentProfile.status = STATUS_SUCCESS
       })
       .addCase(getProfileData.rejected, (state, { payload }) => {
-        state.error = payload
+        state.currentProfile.error = payload
+        state.currentProfile.status = STATUS_REJECTED
       })
 
       .addCase(updateUser.pending, (state) => {
@@ -160,11 +170,8 @@ const userSlice = createSlice({
         state.error = action.payload.message
       })
       .addCase(followProfile.pending, (state, action) => {
-        state.status = STATUS_PENDING
-      })
-      .addCase(followProfile.fulfilled, (state, action) => {
         const { userId, profileId, isFollowed } = action.meta.arg
-
+        console.log(action)
         if (isFollowed) {
           //unfollow
           let unfollowedArrUser = state.user.following.filter(
@@ -174,7 +181,7 @@ const userSlice = createSlice({
             (f) => f.id !== userId
           )
           state.user.following = [...unfollowedArrUser]
-          state.currentProfile.following = [...unfollowedArrProfile]
+          state.currentProfile.followers = [...unfollowedArrProfile]
         } else {
           //follow
           state.user.following.push({
@@ -188,10 +195,40 @@ const userSlice = createSlice({
             username: state.user.username,
           })
         }
-        state.status = STATUS_SUCCESS
+
+        // state.status = STATUS_PENDING
+      })
+      .addCase(followProfile.fulfilled, (state, action) => {
+        // state.status = STATUS_SUCCESS
       })
       .addCase(followProfile.rejected, (state, action) => {
-        state.status = STATUS_REJECTED
+        const { userId, profileId, isFollowed } = action.meta.arg
+        console.log(action)
+        if (isFollowed) {
+          //follow
+          state.user.following.push({
+            id: profileId,
+            fullname: state.currentProfile.fullname,
+            username: state.currentProfile.username,
+          })
+          state.currentProfile.followers.push({
+            id: userId,
+            fullname: state.user.fullname,
+            username: state.user.username,
+          })
+        } else {
+          //unfollow
+          let unfollowedArrUser = state.user.following.filter(
+            (f) => f.id !== profileId
+          )
+          let unfollowedArrProfile = state.currentProfile.followers.filter(
+            (f) => f.id !== userId
+          )
+          state.user.following = [...unfollowedArrUser]
+          state.currentProfile.followers = [...unfollowedArrProfile]
+        }
+
+        // state.status = STATUS_REJECTED
         // const { profileId, isFollowed } = action.meta.arg
         // if (!isFollowed) {
         //   //unfollow
@@ -200,10 +237,10 @@ const userSlice = createSlice({
         //   //follow
         //   state.user.user.following.push(profileId)
         // }
-        // state.error = action.payload.message
+        state.error = action.error.message
       })
   },
 })
-// export const { logout } = userSlice.actions
+export const { currentUserProfile } = userSlice.actions
 
 export default userSlice.reducer
