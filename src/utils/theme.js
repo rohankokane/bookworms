@@ -85,7 +85,19 @@ const Input = {
     },
   },
 }
-
+const Link = {
+  baseStyle: {
+    ...brandRing,
+  },
+  variants: {
+    brand: {
+      fontWeight: 600,
+      borderRadius: 'md',
+      colorScheme: 'black',
+      fontSize: 'sm',
+    },
+  },
+}
 const components = {
   Button,
   Heading,
@@ -93,6 +105,7 @@ const components = {
   Divider,
   Avatar,
   Input,
+  Link,
 }
 export const theme = extendTheme(
   {

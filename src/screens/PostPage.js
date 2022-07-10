@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { getPostById } from 'store/postsSlice'
+import { STATUS_PENDING } from 'utils/constants'
 import LoadingScreen from './LoadingScreen'
 
 function PostPage() {
@@ -13,7 +14,7 @@ function PostPage() {
   const dispatch = useDispatch()
   const { status, error, posts } = useSelector((state) => state.posts)
   const post = posts[0]
-  let isLoading = status === 'pending'
+  let isLoading = status === STATUS_PENDING
   let isIdle = status === null
 
   useEffect(() => {

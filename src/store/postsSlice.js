@@ -44,14 +44,26 @@ export const deletePost = createAsyncThunk(
 
 export const likePost = createAsyncThunk(
   'posts/likePost',
-  async ({ pid, userId, isLiked, token }) => {
+  async ({ pid, isLiked, token }) => {
     return client(`posts/${isLiked ? 'un' : ''}like/${pid}`, { token })
   }
 )
 export const bookmarkPost = createAsyncThunk(
   'posts/bookmarkPost',
-  async ({ pid, userId, isBookmarked, token }) => {
+  async ({ pid, isBookmarked, token }) => {
     return client(`posts/${isBookmarked ? 'un' : ''}bookmark/${pid}`, { token })
+  }
+)
+export const addComment = createAsyncThunk(
+  `posts/addComment`,
+  async ({ pid, data, token }) => {
+    return client(`posts/addComment/${pid}`, { method: 'PATCH', data, token })
+  }
+)
+export const deleteComment = createAsyncThunk(
+  `posts/deleteComment`,
+  async ({ cid, token }) => {
+    return client(`posts/deleteComment/${cid}`, { method: 'DELETE', token })
   }
 )
 
@@ -163,7 +175,7 @@ const postsSlice = createSlice({
           state.posts[postIndex].bookmarks.push(userId)
         }
       })
-      .addCase(bookmarkPost.fulfilled, (state, action) => {
+      .addCase(bookmarkPost.fulfilled, (state) => {
         state.status = STATUS_SUCCESS
       })
       .addCase(bookmarkPost.rejected, (state, action) => {
@@ -182,7 +194,26 @@ const postsSlice = createSlice({
           state.posts[postIndex].bookmarks.push(userId)
         }
       })
+      .addCase(addComment.pending, (state, action) => {
+        console.log(action)
+        // const { pid, data } = action.meta.arg
+        // let postIndex = state.posts.findIndex((post) => post.id === pid)
 
+        // state.posts[postIndex].comments.push({})
+
+        state.commentStatus = STATUS_PENDING
+      })
+      .addCase(addComment.fulfilled, (state, action) => {
+        console.log(action)
+        state.posts[0] = action.payload.post
+
+        state.commentStatus = STATUS_SUCCESS
+      })
+      .addCase(addComment.rejected, (state, action) => {
+        state.commentStatus = STATUS_REJECTED
+        state.error = action.error.message
+        console.log(action)
+      })
       .addCase(updatePost.pending, (state) => {
         state.status = STATUS_PENDING
       })
@@ -209,6 +240,19 @@ const postsSlice = createSlice({
       .addCase(deletePost.rejected, (state, action) => {
         state.status = STATUS_REJECTED
         state.error = action.payload.message
+      })
+      .addCase(deleteComment.pending, (state, action) => {
+        state.commentStatus = STATUS_PENDING
+      })
+      .addCase(deleteComment.fulfilled, (state, action) => {
+        state.commentStatus = STATUS_SUCCESS
+        const newComments = state.posts[0].comments.filter(
+          (comment) => comment.id !== action.meta.arg.cid
+        )
+        state.posts[0].comments = newComments
+      })
+      .addCase(deleteComment.rejected, (state, action) => {
+        state.commentStatus = STATUS_REJECTED
       })
   },
 })

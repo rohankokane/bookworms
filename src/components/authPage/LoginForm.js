@@ -39,7 +39,7 @@ function LoginForm({ setLoginMode }) {
 
     if (data === undefined) loginFormData = prepareFormData(formState)
     else loginFormData = prepareFormData(data)
-
+    console.log({ loginFormData, data })
     dispatch(loginUser({ data: loginFormData }))
       .then((action) => {
         if (!action.error) return
@@ -48,7 +48,7 @@ function LoginForm({ setLoginMode }) {
           description: `${action?.error?.message} Please try again`,
           status: 'error',
           position: 'bottom-right',
-          duration: null,
+          duration: 5000,
           isClosable: true,
         })
       })
@@ -119,7 +119,9 @@ function LoginForm({ setLoginMode }) {
             disabled={!formState.isValid || isLoading}
             w='full'
             variant={'solid'}
-            onClick={handleLogin}
+            onClick={() => {
+              handleLogin()
+            }}
           >
             Login
             {isLoading ? <Spinner css={{ marginLeft: 5 }} /> : null}

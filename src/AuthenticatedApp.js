@@ -44,7 +44,7 @@ function AuthenticatedApp() {
             >
               <SideNavBar />
             </GridItem>
-            <GridItem colSpan={feedColSpan}>
+            <GridItem colSpan={feedColSpan} margin-bottom={'16'}>
               <AppRoutes />
             </GridItem>
             <GridItem

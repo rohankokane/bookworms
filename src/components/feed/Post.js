@@ -4,6 +4,7 @@ import {
   Button,
   Divider,
   Flex,
+  Link,
   Modal,
   ModalBody,
   ModalContent,
@@ -12,7 +13,11 @@ import {
   ModalOverlay,
   Spacer,
   useDisclosure,
+  useToast,
+  VStack,
 } from '@chakra-ui/react'
+import { Link as RouterLink } from 'react-router-dom'
+
 import { useState } from 'react'
 import IconBtn from 'components/IconBtn'
 import { useAuth } from 'hooks/auth-hook'
@@ -23,49 +28,45 @@ import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { bookmarkPost, deletePost, likePost } from 'store/postsSlice'
 import EditPostForm from './EditPostForm'
-
-const COMMENTS = [
-  {
-    id: '1234',
-    username: 'rohan',
-    comment: 'hey first comment',
-  },
-  {
-    id: '1235',
-    username: 'rock',
-    comment: 'hey new comment',
-  },
-]
+import CommentBox from 'components/post/CommentBox'
+import { useEffect } from 'react'
+import { timeSince } from 'utils/time'
 
 let likeRequestPending = false
 let bookmarkRequestPending = false
 function Post({ post }) {
-  const [editMode, setEditMode] = useState(false)
-  const { userId, token } = useAuth()
-  const location = useLocation()
-  const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [editMode, setEditMode] = useState(false)
+  const [commentBoxFocus, setCommentBoxFocus] = useState(false)
+  const { userId, token } = useAuth()
   const client = useClient()
+  const navigate = useNavigate()
+  const { state, pathname } = useLocation()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const toast = useToast()
+  const focusOnComment = state?.focusOnComment ?? false
+  useEffect(() => {
+    if (!focusOnComment) return
+
+    console.log({ focus: focusOnComment, post: 'LOGGED' })
+
+    setCommentBoxFocus(true)
+  }, [focusOnComment])
+
   let isInFeed = !location.pathname.includes('post')
   let isLiked = post.likes.includes(userId)
   let isBookmarked = post.bookmarks.includes(userId)
   let isUserPost = post.creator?.id === userId || post.creator === userId
 
-  const onClickLike = () => {
-    if (likeRequestPending) {
-      return
-    }
-
+  const handleClickLike = () => {
+    if (likeRequestPending) return
     dispatch(likePost({ pid: post.id, userId, isLiked, token })).then(() => {
       likeRequestPending = false
     })
     likeRequestPending = true
   }
-  const onClickBookmark = () => {
-    if (bookmarkRequestPending) {
-      return
-    }
+  const handleClickBookmark = () => {
+    if (bookmarkRequestPending) return
 
     dispatch(bookmarkPost({ pid: post.id, userId, isBookmarked, token })).then(
       () => {
@@ -74,32 +75,40 @@ function Post({ post }) {
     )
     bookmarkRequestPending = true
   }
-  const onOpenPostClick = () => {
+  const handleOpenPostClick = () => {
     if (isInFeed) {
       navigate(`/post/${post.id}`)
     } else {
       navigate(-1)
     }
   }
-  const onEditMode = () => {
+  const handleEditMode = () => {
     setEditMode((e) => !e)
   }
-  const onDeletePost = () => {
+  const handleDeletePost = () => {
     if (!isUserPost) return
-    // const dataToSend = prepareFormData(data)
-    //
-    dispatch(deletePost(client(`posts/${post.id}`, { method: 'DELETE' }))).then(
-      () => {
+
+    dispatch(deletePost(client(`posts/${post.id}`, { method: 'DELETE' })))
+      .then(() => {
         navigate(-1)
-      }
-    )
+      })
+      .catch((action) => {
+        toast({
+          title: 'Error occurred',
+          description: `${action?.error?.message} Please try again`,
+          status: 'error',
+          position: 'bottom-right',
+          duration: 5000,
+          isClosable: true,
+        })
+      })
   }
 
   return (
     <Flex
       as={'article'}
       direction={'column'}
-      align={'center'}
+      align={'flex-start'}
       justify={'start'}
       w={'full'}
       borderWidth='1px'
@@ -109,37 +118,47 @@ function Post({ post }) {
       bg='white'
       my={4}
     >
-      <Flex px='2' py='2' w='full' direction={'horizontal'} align={'center'}>
+      <Flex px='4' py='2' w='full' direction={'horizontal'} align={'baseline'}>
         <Avatar
           size={'sm'}
           name={post.creator.fullname}
           src={post.creator?.image}
         />
-        <Button
-          onClick={() => {
-            navigate(`/profile/${post.creator.id}`)
-          }}
-          variant={'link'}
-          color={'gray.800'}
+        <Link
+          to={`/profile/${post.creator.id}`}
+          as={RouterLink}
+          variant={'brand'}
           mx='2'
-          size={'sm'}
         >
           {post.creator.username || post.creator.fullname}
-        </Button>
+        </Link>
+
+        <Flex fontSize='xs' color={'gray.600'}>
+          {timeSince(post.createdAt)}
+        </Flex>
         <Spacer />
+        {!isInFeed && isUserPost && (
+          <IconBtn
+            onClick={handleEditMode}
+            icon={<FaEdit />}
+            marginRight='2'
+            aria-label='edit this post'
+          />
+        )}
         {!isInFeed && isUserPost && (
           <IconBtn
             onClick={onOpen}
             aria-label='delete this post'
-            icon={<FaTrash />}
+            icon={<FaTrash size={'18'} />}
           />
         )}
       </Flex>
-      <Divider />
+      {/* <Divider /> */}
+
       {editMode ? (
         <EditPostForm
           initialCaption={post.caption}
-          onEditMode={onEditMode}
+          onEditMode={handleEditMode}
           postId={post.id}
         />
       ) : (
@@ -149,46 +168,86 @@ function Post({ post }) {
       )}
       {!editMode && (
         <>
-          <Divider />
+          {/* <Divider /> */}
+
           <Flex
-            px='2'
+            px='4'
             py='2'
             w='full'
             direction={'horizontal'}
             align={'center'}
+            justifyContent='space-between'
+            color={'gray.500'}
+            fontSize='0.8rem'
+            maxW='480px'
+            marginX='auto'
           >
-            <IconBtn
-              highLighted={isLiked}
-              onClick={onClickLike}
-              icon={<FaHeart />}
-              aria-label='like this post'
-            />
-            <IconBtn icon={<FaComment />} aria-label='comment on this post' />
-            <IconBtn
-              highLighted={!isInFeed}
-              onClick={() => {
-                onOpenPostClick()
-              }}
-              icon={<BsBookFill />}
-              aria-label='read this post'
-            />
-            {!isInFeed && isUserPost && (
+            <Flex direction={'horizontal'} align={'center'}>
               <IconBtn
-                onClick={onEditMode}
-                icon={<FaEdit />}
-                aria-label='edit this post'
+                size='sm'
+                highLighted={isLiked}
+                onClick={handleClickLike}
+                icon={<FaHeart />}
+                aria-label='like this post'
+                marginRight='1'
               />
-            )}
-            <Spacer />
-            <IconBtn
-              onClick={onClickBookmark}
-              highLighted={isBookmarked}
-              icon={<BsBookmarkStarFill />}
-              aria-label='bookmark this post'
-            />
+              {post.likes.length}
+            </Flex>
+            <Flex direction={'horizontal'} align={'center'}>
+              <IconBtn
+                size='sm'
+                marginRight='1'
+                icon={<FaComment />}
+                aria-label='comment on this post'
+                onClick={() => {
+                  navigate(`/post/${post.id}`, {
+                    state: { focusOnComment: true },
+                  })
+                }}
+              />
+              {post.comments.length || 0}
+            </Flex>
+            <Flex direction={'horizontal'} align={'center'}>
+              <IconBtn
+                size='sm'
+                marginRight='1'
+                highLighted={!isInFeed}
+                onClick={() => {
+                  handleOpenPostClick()
+                }}
+                icon={<BsBookFill />}
+                aria-label='read this post'
+              />
+              {post.viewCount || 0}
+            </Flex>
+            {/* <Spacer /> */}
+            <Flex direction={'horizontal'} align={'center'} mr='2'>
+              <IconBtn
+                size='sm'
+                onClick={handleClickBookmark}
+                highLighted={isBookmarked}
+                icon={<BsBookmarkStarFill />}
+                aria-label='bookmark this post'
+              />
+              {/* {post.bookmarks.length} */}
+            </Flex>
           </Flex>
+          {!isInFeed && (
+            <>
+              <Divider />
+
+              <VStack py='2' px='4' w='full'>
+                <CommentBox
+                  postId={post?.id}
+                  comments={post?.comments}
+                  focusOnComment={commentBoxFocus}
+                />
+              </VStack>
+            </>
+          )}
         </>
       )}
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -199,7 +258,7 @@ function Post({ post }) {
             <Button variant='ghost' mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button onClick={onDeletePost} colorScheme='red'>
+            <Button onClick={handleDeletePost} colorScheme='red'>
               Delete
             </Button>
           </ModalFooter>
