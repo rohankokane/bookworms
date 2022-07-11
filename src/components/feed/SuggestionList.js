@@ -2,7 +2,7 @@ import { List, ListItem } from '@chakra-ui/react'
 import UserTag from './UserTag'
 
 function SuggestionList({ list, ...props }) {
-  if (!list?.length) return 'No users'
+  if (!list?.length) return 'No users found'
   return (
     <List w={'full'} spacing={3} overflowY={'auto'} {...props}>
       {list.map((profile) => (

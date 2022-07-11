@@ -16,6 +16,10 @@ import { useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import SideNavBar from 'components/feed/SideNavBar'
 import Sidebar from 'components/feed/Sidebar'
+import BookmarksPage from 'screens/BookmarksPage'
+import LogOut from 'screens/LogOut'
+import SearchPage from 'screens/SearchPage'
+import NotFound from 'screens/NotFound'
 
 function AuthenticatedApp() {
   const location = useLocation()
@@ -65,11 +69,13 @@ function AppRoutes() {
   return (
     <Routes>
       <Route exact path='/' element={<Feed />} />
+      <Route exact path='/bookmarks' element={<BookmarksPage />} />
+      <Route exact path='/search' element={<SearchPage />} />
       <Route exact path='/post/:id' element={<PostPage />} />
       <Route exact path='/post/edit/:id' element={<PostPage />} />
-      {/* <Route path='/profile/me' element={<UserProfile />} /> */}
       <Route path='/profile/:id' element={<UserProfile />} />
-      {/* <Route path="*" element={<NotFoundScreen />} /> */}
+      <Route path='/logout' element={<LogOut />} />
+      <Route path={'*'} element={<NotFound />} />
     </Routes>
   )
 }

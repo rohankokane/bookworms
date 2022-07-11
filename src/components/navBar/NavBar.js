@@ -83,8 +83,6 @@ function NavBar() {
         >
           <SiteLogo display={logoDisplay} size='lg' />
           <Spacer />
-          <SearchBox />
-          <Spacer />
           <Box {...getBoxStyle()}>
             <Link tabIndex={-1} to='/'>
               <IconBtn

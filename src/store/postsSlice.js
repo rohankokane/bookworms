@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from 'utils/client'
-
-const STATUS_PENDING = 'pending'
-const STATUS_SUCCESS = 'success'
-const STATUS_REJECTED = 'rejected'
+import {
+  STATUS_PENDING,
+  STATUS_REJECTED,
+  STATUS_SUCCESS,
+} from 'utils/constants'
 
 export const getPosts = createAsyncThunk('posts/getPosts', async (token) => {
   // write getBy /:uid
@@ -19,6 +20,12 @@ export const getPostsByUserId = createAsyncThunk(
   'posts/getPostsByUserId',
   async ({ token, userId }) => {
     return client(`posts/user/${userId}`, { token })
+  }
+)
+export const getBookemarkedByUserId = createAsyncThunk(
+  'posts/getBookemarked',
+  async (token) => {
+    return client(`posts/bookmarked`, { token })
   }
 )
 export const createPost = createAsyncThunk(
@@ -41,7 +48,6 @@ export const deletePost = createAsyncThunk(
     return promise
   }
 )
-
 export const likePost = createAsyncThunk(
   'posts/likePost',
   async ({ pid, isLiked, token }) => {
@@ -111,6 +117,19 @@ const postsSlice = createSlice({
         state.status = STATUS_REJECTED
         state.error = action.payload.message
       })
+      .addCase(getBookemarkedByUserId.pending, (state, action) => {
+        state.status = STATUS_PENDING
+        state.posts = []
+      })
+      .addCase(getBookemarkedByUserId.fulfilled, (state, action) => {
+        state.status = STATUS_SUCCESS
+        state.posts = [...action.payload.posts]
+      })
+      .addCase(getBookemarkedByUserId.rejected, (state, action) => {
+        state.status = STATUS_REJECTED
+        state.error = action.payload
+      })
+
       .addCase(createPost.pending, (state) => {
         state.status = STATUS_PENDING
       })

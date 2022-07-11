@@ -31,8 +31,8 @@ import EditProfile from './EditProfile'
 import ProfileButton from './ProfileButton'
 import ProfileStat from './ProfileStat'
 
-function ProfileTab({ profileData, postsCount }) {
-  const { id } = useParams()
+function ProfileTab({ profileData }) {
+  const id = profileData.id
   const { userId, token } = useAuth()
   const dispatch = useDispatch()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -42,7 +42,17 @@ function ProfileTab({ profileData, postsCount }) {
   let isFollowed = false
   if (!isOwnProfile) {
     //or check if it's there in user's following
-    isFollowed = profileData.followers.some((p) => p.id === userId)
+    // eslint-disable-next-line no-debugger
+
+    if (profileData.followers[0]?.id === undefined)
+      isFollowed = profileData.followers.some((id) => id === userId)
+    else isFollowed = profileData.followers.some((p) => p.id === userId)
+    console.log({
+      isFollowed,
+      name: profileData.username,
+      followers: profileData.followers,
+      userId,
+    })
   }
   const onProfileButtonClick = () => {
     if (isOwnProfile) {
@@ -114,7 +124,7 @@ function ProfileTab({ profileData, postsCount }) {
               statsData={{
                 followers: profileData.followers,
                 following: profileData.following,
-                postsCount,
+                postsCount: profileData.posts.length,
               }}
               justifyItems={'start'}
               display={statsMd}
@@ -134,7 +144,7 @@ function ProfileTab({ profileData, postsCount }) {
           statsData={{
             followers: profileData.followers,
             following: profileData.following,
-            postsCount,
+            postsCount: profileData.posts.length,
           }}
           gridColumn={'1/3'}
           display={statsBar}

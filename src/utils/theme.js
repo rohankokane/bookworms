@@ -83,6 +83,14 @@ const Input = {
         },
       },
     },
+    filled: {
+      field: {
+        backgroundColor: 'brand.50',
+        _focus: {
+          borderColor: 'brand.400',
+        },
+      },
+    },
   },
 }
 const Link = {
@@ -95,6 +103,12 @@ const Link = {
       borderRadius: 'md',
       colorScheme: 'black',
       fontSize: 'sm',
+    },
+    ghost: {
+      textDecoration: 'none',
+      _hover: {
+        textDecoration: 'none',
+      },
     },
   },
 }

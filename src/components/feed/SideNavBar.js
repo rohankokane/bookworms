@@ -12,6 +12,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useAsync } from 'hooks/async-hook'
+import { useAuth } from 'hooks/auth-hook'
 import { useClient } from 'hooks/client-hook'
 import { useEffect } from 'react'
 import {
@@ -30,20 +31,16 @@ import {
 import { FaHome } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import LoadingScreen from 'screens/LoadingScreen'
-import { STATUS_PENDING } from 'utils/constants'
-import SuggestionList from './SuggestionList'
 const activeStyle = {
   color: 'brand.500',
+  fontWeight: '600',
 }
 function SideNavBar() {
-  // const { status } = useSelector((state) => state.user)
   // const { username, fullname, image, suggestions } = useSelector(
   //   (state) => state.user.user
   // )
+  const { token, userId } = useAuth()
 
-  // let isLoading = status === STATUS_PENDING
-  // if (isLoading) return <LoadingScreen />
   return (
     <Box as={'aside'}>
       <VStack alignItems={'stretch'}>
@@ -71,7 +68,7 @@ function SideNavBar() {
             </Text>
           </Flex>
         </Link>
-        <Link as={NavLink} to={'/myprofile'} _activeLink={activeStyle}>
+        <Link as={NavLink} to={`/profile/${userId}`} _activeLink={activeStyle}>
           <Flex as='span' p='1rem' align={'center'} width={'100%'}>
             <Icon as={AiOutlineUser} fontSize={'1.5rem'}></Icon>
             <Text px={4} fontSize={'l'}>
