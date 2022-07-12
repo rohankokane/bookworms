@@ -23,7 +23,7 @@ function BookmarksPage() {
   let isSuccess = status === STATUS_SUCCESS
 
   if (isLoading) return <LoadingScreen />
-  if (isSuccess && posts.length === 0) {
+  else if (isSuccess && posts.length === 0) {
     return (
       <VStack>
         <Text
@@ -48,8 +48,7 @@ function BookmarksPage() {
         />
       </VStack>
     )
-  }
-  return <PostsList posts={posts} />
+  } else return <PostsList posts={posts} />
 }
 
 export default BookmarksPage

@@ -203,7 +203,7 @@ function Post({ post }) {
                   })
                 }}
               />
-              {post.comments.length || 0}
+              {post?.comments?.length || 0}
             </Flex>
             <Flex direction={'horizontal'} align={'center'}>
               <IconBtn

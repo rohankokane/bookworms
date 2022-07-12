@@ -69,7 +69,7 @@ function SignUpForm({ setLoginMode }) {
   return (
     <VStack w='full' h='full' p={10} spacing={6} alignItems='center'>
       <SiteLogo />
-      <Heading size={'sm'} color={'gray'}>
+      <Heading size={'sm'} color={'gray.600'} textAlign={'center'}>
         Sign up to join the community of bookworms.
       </Heading>
       <VStack w={'full'} alignItems='flex-start' spacing={8}>

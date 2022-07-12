@@ -1,6 +1,7 @@
 import {
   Button,
   Divider,
+  Heading,
   Spinner,
   Text,
   useToast,
@@ -82,6 +83,9 @@ function LoginForm({ setLoginMode }) {
     <VStack w='full' h='full' p={10} spacing={6} alignItems='center'>
       {/* <Box w='full' h='full' px={[0, 4, 6]} py={8} paddingTop={10}> */}
       <SiteLogo />
+      <Heading size={'sm'} color={'gray.600'} textAlign={'center'}>
+        Welcome to the community of bibliophiles!
+      </Heading>
       <VStack w={'full'} alignItems='flex-start' spacing={8}>
         <VStack w={'full'} alignItems='flex-start' spacing={4}>
           <FormInput
