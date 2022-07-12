@@ -8,7 +8,7 @@ const ProfileCard = ({ data }) => {
       display={'block'}
       variant={'ghost'}
       as={RouterLink}
-      mx={1}
+      mx={['0', '1']}
       my={4}
       to={`/profile/${data.id}`}
     >
@@ -19,11 +19,10 @@ const ProfileCard = ({ data }) => {
         justify={'start'}
         w={'full'}
         borderWidth='1px'
-        borderRadius='lg'
         overflow='hidden'
         p={0}
         bg='white'
-        paddingX={'8'}
+        paddingX={['0', '4']}
         paddingY={'4'}
       >
         <ProfileTab profileData={data} />

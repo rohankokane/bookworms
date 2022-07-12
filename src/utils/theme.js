@@ -65,7 +65,7 @@ const Heading = {
 const Container = {
   variants: {
     mainContainer: {
-      maxWidth: ['full', '600px', '900px', '900px', '1200px'],
+      maxWidth: ['full', '600px', '1000px', '1200px'],
     },
   },
 }

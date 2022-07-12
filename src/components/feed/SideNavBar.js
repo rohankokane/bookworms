@@ -97,10 +97,10 @@ function SideNavBar() {
       </VStack>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent mx={'2'}>
           <ModalHeader>Create new post</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody padding={'1rem'}>
             <CreatePostForm onClose={onClose} />
           </ModalBody>
         </ModalContent>

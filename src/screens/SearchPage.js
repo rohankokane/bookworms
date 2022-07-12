@@ -85,7 +85,7 @@ const SearchPage = () => {
 
   const debouncedSearchChange = debounce(handleSearchChange, 400)
   return (
-    <VStack>
+    <VStack marginX='1rem'>
       <HStack w='full'>
         <Input
           onChange={debouncedSearchChange}

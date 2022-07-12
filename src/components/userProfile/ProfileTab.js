@@ -76,6 +76,7 @@ function ProfileTab({ profileData }) {
   return (
     <Container p={0} size={{ base: 'full', md: 'container.md' }}>
       <SimpleGrid
+        paddingX='1rem'
         style={{ justifyItems: 'center', gridTemplateColumns: '1fr 3fr' }}
       >
         <Avatar
@@ -132,18 +133,19 @@ function ProfileTab({ profileData }) {
         <VStack w='full' textAlign={'left'} gridColumn={'1/3'} spacing={'1'}>
           <Text>{profileData.bio}</Text>
         </VStack>
-        <Divider my={4} display={statsBar} gridColumn={'1/3'} />
-        <ProfileStat
-          statsData={{
-            followers: profileData.followers,
-            following: profileData.following,
-            postsCount: profileData.posts.length,
-          }}
-          gridColumn={'1/3'}
-          display={statsBar}
-        />
         {/* <Divider /> */}
       </SimpleGrid>
+      <Divider my={4} display={statsBar} gridColumn={'1/3'} />
+      <ProfileStat
+        paddingX={'1rem'}
+        statsData={{
+          followers: profileData.followers,
+          following: profileData.following,
+          postsCount: profileData.posts.length,
+        }}
+        gridColumn={'1/3'}
+        display={statsBar}
+      />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

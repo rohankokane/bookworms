@@ -1,10 +1,10 @@
-import { Button, Flex, VStack } from '@chakra-ui/react'
+import { Box, Button, Flex, Spacer, VStack } from '@chakra-ui/react'
 import FormInput from 'components/Input'
 import { useClient } from 'hooks/client-hook'
 import { useForm, prepareFormData } from 'hooks/form-hook'
 import { useDispatch } from 'react-redux'
 import { createPost } from 'store/postsSlice'
-import { VALIDATOR_MINLENGTH } from 'utils/validators'
+import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from 'utils/validators'
 
 function CreatePostForm({ onClose }) {
   const dispatch = useDispatch()
@@ -21,6 +21,8 @@ function CreatePostForm({ onClose }) {
   )
   const handleCreatePost = async (data) => {
     // console.log(data)
+    if (!data.isValid) return
+
     const dataToSend = prepareFormData(data)
     // console.log(dataToSend)
     dispatch(
@@ -38,10 +40,13 @@ function CreatePostForm({ onClose }) {
         onChange={inputHandler}
         type='textarea'
         rows='8'
-        validators={[VALIDATOR_MINLENGTH(6)]}
+        isRequired={true}
+        validators={[VALIDATOR_REQUIRE()]}
+        errorMessage='Post cannot be empty'
       />
-      <Flex paddingY='2' w='full' justify='end'>
-        <Button size='md' onClick={() => handleCreatePost(formState)}>
+      <Flex w='full' justify='end'>
+        <Spacer />
+        <Button marginTop={'1'} onClick={() => handleCreatePost(formState)}>
           Post
         </Button>
       </Flex>

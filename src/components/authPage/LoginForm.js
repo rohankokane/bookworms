@@ -108,16 +108,6 @@ function LoginForm({ setLoginMode }) {
 
         <VStack w={'full'} alignItems='flex-start' spacing={4}>
           <Button
-            aria-label='guest login'
-            disabled={isLoading}
-            w='full'
-            variant={'outline'}
-            onClick={guestLogin}
-          >
-            Login as a Guest User
-            {isLoading ? <Spinner css={{ marginLeft: 5 }} /> : null}
-          </Button>
-          <Button
             aria-label='login'
             disabled={!formState.isValid || isLoading}
             w='full'
@@ -127,6 +117,16 @@ function LoginForm({ setLoginMode }) {
             }}
           >
             Login
+            {isLoading ? <Spinner css={{ marginLeft: 5 }} /> : null}
+          </Button>
+          <Button
+            aria-label='guest login'
+            disabled={isLoading}
+            w='full'
+            variant={'outline'}
+            onClick={guestLogin}
+          >
+            Login as a Guest User
             {isLoading ? <Spinner css={{ marginLeft: 5 }} /> : null}
           </Button>
         </VStack>

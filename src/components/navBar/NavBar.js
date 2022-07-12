@@ -69,6 +69,7 @@ function NavBar() {
       position: 'fixed',
       bottom: '0',
       left: '0',
+      height: '63px',
     }
   }
 
@@ -231,10 +232,10 @@ function NavBar() {
 
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent mx={'1'}>
+            <ModalContent mx={'2'}>
               <ModalHeader>Create a new post</ModalHeader>
               <ModalCloseButton />
-              <ModalBody>
+              <ModalBody padding={'1rem'}>
                 <CreatePostForm onClose={onClose} />
               </ModalBody>
             </ModalContent>

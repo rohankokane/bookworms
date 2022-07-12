@@ -1,4 +1,4 @@
-import { Container, Divider } from '@chakra-ui/react'
+import { Box, Container, Divider } from '@chakra-ui/react'
 import PostsList from 'components/feed/PostsList'
 import ProfileTab from 'components/userProfile/ProfileTab'
 import LoadingScreen from './LoadingScreen'
@@ -33,13 +33,13 @@ function UserProfile() {
   if (isLoading) return <LoadingScreen />
   // console.log(currentProfile)
   return (
-    <div>
+    <Box>
       <ProfileTab profileData={currentProfile} postsCount={posts.length || 0} />
       <Divider my={4} mb={6} />
       <Container size={'container.md'} paddingX='0'>
         {isLoadingPosts ? <LoadingScreen /> : <PostsList posts={posts} />}
       </Container>
-    </div>
+    </Box>
   )
 }
 

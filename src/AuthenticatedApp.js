@@ -39,7 +39,13 @@ function AuthenticatedApp() {
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <NavBar />
       <Box bg={'#fafafa'} w={'full'} minH={'70vh'}>
-        <Container variant={'mainContainer'} py={'4'} mt={'16'} as='main'>
+        <Container
+          as='main'
+          variant={'mainContainer'}
+          px='0'
+          py={'4'}
+          mt={'16'}
+        >
           <Grid templateColumns='repeat(4,1fr)' gap={8}>
             <GridItem
               display={sideBarDisplay}

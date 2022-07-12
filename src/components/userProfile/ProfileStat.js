@@ -13,6 +13,7 @@ import {
   SimpleGrid,
   Text,
   useDisclosure,
+  useMediaQuery,
   VStack,
 } from '@chakra-ui/react'
 import SuggestionList from 'components/feed/SuggestionList'
@@ -33,9 +34,17 @@ function ProfileStat({ statsData, ...props }) {
     }
     onOpen()
   }
+  const [isMobile] = useMediaQuery('(max-width: 700px)')
+
+  const getMobileStyle = () => {
+    if (!isMobile) return
+    return {
+      justifyItems: 'center',
+    }
+  }
   return (
     <Box {...props} w={'full'} maxW={'sm'}>
-      <SimpleGrid w={'full'} columns={3} spacing={3}>
+      <SimpleGrid w={'full'} columns={3} spacing={3} {...getMobileStyle()}>
         <HStack spacing={'2'}>
           <Text fontWeight={'bold'}>{postsCount}</Text>
           <Text fontSize={'sm'} color={'gray.600'}>
@@ -69,7 +78,7 @@ function ProfileStat({ statsData, ...props }) {
       </SimpleGrid>
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
-        <ModalContent paddingBottom={'3'}>
+        <ModalContent mx={'2'} paddingBottom={'3'}>
           <ModalHeader>{modalHeading}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

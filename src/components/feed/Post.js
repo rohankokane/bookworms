@@ -110,11 +110,10 @@ function Post({ post }) {
       justify={'start'}
       w={'full'}
       borderWidth='1px'
-      borderRadius='lg'
       overflow='hidden'
       p={0}
       bg='white'
-      my={4}
+      marginBottom={4}
     >
       <Flex px='4' py='2' w='full' direction={'horizontal'} align={'baseline'}>
         <Avatar
