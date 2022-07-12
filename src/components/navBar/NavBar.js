@@ -16,7 +16,6 @@ import {
   Link,
 } from '@chakra-ui/react'
 import IconBtn from '../IconBtn'
-import SearchBox from './SearchBox'
 import SiteLogo from '../SiteLogo'
 import {
   AiFillHome,
