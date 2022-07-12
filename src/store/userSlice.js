@@ -107,12 +107,10 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => {
-        console.log('PENDING', state)
         state.status = STATUS_PENDING
         state.error = null
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        console.log('FULFILLED', state, action)
         state.status = STATUS_SUCCESS
         state.userId = action.payload.userId
         state.token = action.payload.token
@@ -122,7 +120,7 @@ const userSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = STATUS_REJECTED
-        console.log('REJECTED', state, action.error.message)
+        console.log('REJECTED', state, action.error)
 
         state.error = action.error.message
       })
@@ -171,7 +169,6 @@ const userSlice = createSlice({
       })
       .addCase(followProfile.pending, (state, action) => {
         const { userId, profileId, isFollowed } = action.meta.arg
-        console.log(action)
         if (isFollowed) {
           //unfollow
           let unfollowedArrUser = state.user.following.filter(
@@ -203,7 +200,6 @@ const userSlice = createSlice({
       })
       .addCase(followProfile.rejected, (state, action) => {
         const { userId, profileId, isFollowed } = action.meta.arg
-        console.log(action)
         if (isFollowed) {
           //follow
           state.user.following.push({

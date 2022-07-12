@@ -1,20 +1,21 @@
 import {
-  Avatar,
   Box,
   Button,
   Divider,
   Flex,
-  HStack,
   Icon,
   Link,
-  Spinner,
   Text,
   VStack,
+  useDisclosure,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
 } from '@chakra-ui/react'
-import { useAsync } from 'hooks/async-hook'
 import { useAuth } from 'hooks/auth-hook'
-import { useClient } from 'hooks/client-hook'
-import { useEffect } from 'react'
 import {
   AiFillHome,
   AiOutlineHome,
@@ -31,14 +32,14 @@ import {
 import { FaHome } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
+import CreatePostForm from './CreatePostForm'
 const activeStyle = {
   color: 'brand.500',
   fontWeight: '600',
 }
 function SideNavBar() {
-  // const { username, fullname, image, suggestions } = useSelector(
-  //   (state) => state.user.user
-  // )
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   const { token, userId } = useAuth()
 
   return (
@@ -85,10 +86,25 @@ function SideNavBar() {
           </Flex>
         </Link>
         <Divider style={{ margin: '1rem 0 0.5rem' }} />
-        <Button leftIcon={<AiOutlinePlus />} variant={'solid'}>
+        <Button
+          onClick={onOpen}
+          aria-label='Create new post'
+          leftIcon={<AiOutlinePlus />}
+          variant={'solid'}
+        >
           New Post
         </Button>
       </VStack>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Create new post</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <CreatePostForm onClose={onClose} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   )
 }

@@ -25,7 +25,6 @@ import {
 } from '@chakra-ui/react'
 import { useAuth } from 'hooks/auth-hook'
 import { useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
 import { followProfile } from 'store/userSlice'
 import EditProfile from './EditProfile'
 import ProfileButton from './ProfileButton'
@@ -47,12 +46,6 @@ function ProfileTab({ profileData }) {
     if (profileData.followers[0]?.id === undefined)
       isFollowed = profileData.followers.some((id) => id === userId)
     else isFollowed = profileData.followers.some((p) => p.id === userId)
-    console.log({
-      isFollowed,
-      name: profileData.username,
-      followers: profileData.followers,
-      userId,
-    })
   }
   const onProfileButtonClick = () => {
     if (isOwnProfile) {

@@ -39,7 +39,6 @@ function LoginForm({ setLoginMode }) {
 
     if (data === undefined) loginFormData = prepareFormData(formState)
     else loginFormData = prepareFormData(data)
-    console.log({ loginFormData, data })
     dispatch(loginUser({ data: loginFormData }))
       .then((action) => {
         if (!action.error) return

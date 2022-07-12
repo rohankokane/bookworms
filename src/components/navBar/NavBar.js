@@ -13,23 +13,41 @@ import {
   ModalOverlay,
   Box,
   useMediaQuery,
+  Link,
 } from '@chakra-ui/react'
 import IconBtn from '../IconBtn'
 import SearchBox from './SearchBox'
 import SiteLogo from '../SiteLogo'
-import { AiFillHome, AiFillPlusCircle } from 'react-icons/ai'
+import {
+  AiFillHome,
+  AiFillPlusCircle,
+  AiOutlineHome,
+  AiOutlineLogout,
+  AiOutlineSearch,
+} from 'react-icons/ai'
 import { IoLogOut } from 'react-icons/io5'
 import CreatePostForm from '../feed/CreatePostForm'
-import { Link, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logOut, logout } from 'store/userSlice'
-
+import { BsBookmarkCheck } from 'react-icons/bs'
+import { NavLink } from 'react-router-dom'
+import { useAuth } from 'hooks/auth-hook'
+const activeStyle = {
+  borderBottom: '3px solid',
+  borderColor: 'brand.500',
+  fontWeight: '600',
+}
 function NavBar() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const path = location.pathname.split('/')
+  const id = path[path.length - 1]
+  const { userId } = useAuth()
+  const isUserProfile = id === userId
+
   const dispatch = useDispatch()
-  const { username, fullname, image, userId } = useSelector(
-    (state) => state.user.user
-  )
+  const { username, fullname, image } = useSelector((state) => state.user.user)
   const onLogout = () => {
     dispatch(logOut())
   }
@@ -43,8 +61,8 @@ function NavBar() {
   const getBoxStyle = () => {
     if (!isMobile) return
     return {
-      py: '3',
-      px: '2',
+      py: '2.5',
+      px: '3',
       bgColor: 'white',
       display: 'flex',
       justifyContent: 'space-between',
@@ -81,7 +99,7 @@ function NavBar() {
           width='100%'
           height={'16'}
         >
-          <SiteLogo display={logoDisplay} size='lg' />
+          <SiteLogo size='lg' />
           <Spacer />
           <Box {...getBoxStyle()}>
             <Link tabIndex={-1} to='/'>
@@ -118,23 +136,104 @@ function NavBar() {
               onClick={() => {
                 navigate(`/profile/${userId}`)
               }}
-              icon={
-                <Avatar
-                  size={'sm'}
-                  // mx={1}
-                  // maxH={'1.75rem'}
-                  // maxW={'1.75rem'}
-                  name={fullname}
-                  src={image}
-                />
-              }
+              icon={<Avatar size={'sm'} name={fullname} src={image} />}
             />
           </Box>
+          {isMobile && (
+            <IconBtn
+              aria-label='Logout'
+              p={1}
+              color={'brand.500'}
+              onClick={onLogout}
+              icon={<AiOutlineLogout />}
+            />
+          )}
+          {isMobile && (
+            <Box px={'1'} {...getBoxStyle()}>
+              <Link
+                variant='noFocus'
+                tabIndex={-1}
+                as={NavLink}
+                to={'/'}
+                _activeLink={activeStyle}
+              >
+                <IconBtn
+                  variant={'noFocus'}
+                  aria-label='go to home feed'
+                  color={'brand.500'}
+                  size='md'
+                  fontSize='1.75rem'
+                  icon={<AiOutlineHome />}
+                />
+              </Link>
+              <Link
+                variant='noFocus'
+                tabIndex={-1}
+                as={NavLink}
+                to={'/search'}
+                _activeLink={activeStyle}
+              >
+                <IconBtn
+                  variant={'noFocus'}
+                  aria-label='search users'
+                  color={'brand.500'}
+                  size='md'
+                  fontSize='1.75rem'
+                  icon={<AiOutlineSearch />}
+                />
+              </Link>
+              <IconBtn
+                aria-label='create post'
+                paddingX={'0'}
+                color={'brand.500'}
+                size='md'
+                fontSize='1.75rem'
+                onClick={onOpen}
+                icon={<AiFillPlusCircle />}
+              />
+              <Link
+                variant='noFocus'
+                tabIndex={-1}
+                as={NavLink}
+                to={'/bookmarks'}
+                _activeLink={activeStyle}
+              >
+                <IconBtn
+                  variant={'noFocus'}
+                  aria-label='my bookmarks'
+                  color={'brand.500'}
+                  size='md'
+                  fontSize='1.75rem'
+                  icon={<BsBookmarkCheck />}
+                />
+              </Link>
+              <Box {...(isUserProfile && activeStyle)}>
+                <IconBtn
+                  variant={'noFocus'}
+                  aria-label='Logout'
+                  color={'brand.500'}
+                  size='md'
+                  fontSize='1.75rem'
+                  onClick={() => {
+                    navigate(`/profile/${userId}`)
+                  }}
+                  icon={
+                    <Avatar
+                      size={'sm'}
+                      // mx={1}
+                      name={fullname}
+                      src={image}
+                    />
+                  }
+                />
+              </Box>
+            </Box>
+          )}
 
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>Create new post</ModalHeader>
+            <ModalContent mx={'1'}>
+              <ModalHeader>Create a new post</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
                 <CreatePostForm onClose={onClose} />

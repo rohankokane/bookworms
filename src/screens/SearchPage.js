@@ -14,7 +14,7 @@ import ProfileCard from 'components/userProfile/ProfileCard'
 
 const SearchPage = () => {
   const { data, error, run, isIdle, isLoading, isSuccess, isError } = useAsync()
-  console.log({ isLoading, isSuccess, isError, isIdle })
+
   const client = useClient()
   const users = data?.users || []
 
@@ -26,7 +26,7 @@ const SearchPage = () => {
 
   const handleSearchChange = (e) => {
     const value = e.target.value
-    console.log(value)
+
     if (!value) return
 
     run(client(`users?search=${value}`))

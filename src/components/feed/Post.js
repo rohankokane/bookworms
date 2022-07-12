@@ -48,12 +48,10 @@ function Post({ post }) {
   useEffect(() => {
     if (!focusOnComment) return
 
-    console.log({ focus: focusOnComment, post: 'LOGGED' })
-
     setCommentBoxFocus(true)
   }, [focusOnComment])
 
-  let isInFeed = !location.pathname.includes('post')
+  let isInFeed = !pathname.includes('post')
   let isLiked = post.likes.includes(userId)
   let isBookmarked = post.bookmarks.includes(userId)
   let isUserPost = post.creator?.id === userId || post.creator === userId

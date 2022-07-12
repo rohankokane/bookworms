@@ -214,7 +214,6 @@ const postsSlice = createSlice({
         }
       })
       .addCase(addComment.pending, (state, action) => {
-        console.log(action)
         // const { pid, data } = action.meta.arg
         // let postIndex = state.posts.findIndex((post) => post.id === pid)
 
@@ -223,7 +222,6 @@ const postsSlice = createSlice({
         state.commentStatus = STATUS_PENDING
       })
       .addCase(addComment.fulfilled, (state, action) => {
-        console.log(action)
         state.posts[0] = action.payload.post
 
         state.commentStatus = STATUS_SUCCESS
@@ -231,7 +229,6 @@ const postsSlice = createSlice({
       .addCase(addComment.rejected, (state, action) => {
         state.commentStatus = STATUS_REJECTED
         state.error = action.error.message
-        console.log(action)
       })
       .addCase(updatePost.pending, (state) => {
         state.status = STATUS_PENDING

@@ -78,6 +78,7 @@ function FormInput({
     >
       {inputType === 'textarea' ? (
         <Textarea
+          focusBorderColor={'brand.500'}
           id={id}
           rows={rows || 3}
           value={value}

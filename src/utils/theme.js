@@ -44,6 +44,15 @@ const Button = {
       color: 'gray.300',
       fontSize: '20px',
     },
+    noFocus: {
+      background: 'transparent',
+      borderRadius: 'full',
+      color: 'gray.300',
+      fontSize: '20px',
+      _focus: {
+        ring: 'none',
+      },
+    },
   },
 }
 const Heading = {
@@ -75,6 +84,14 @@ const Avatar = {
 
 const Input = {
   variants: {
+    outline: {
+      field: {
+        _focus: {
+          borderColor: 'brand.500',
+          boxShadow: `0px 1px 0px 0px #3F51B5`,
+        },
+      },
+    },
     flushed: {
       field: {
         _focus: {
@@ -93,6 +110,24 @@ const Input = {
     },
   },
 }
+
+// const TextArea = {
+//   variants: {
+//     outline: {
+//       field: {
+//         focusBorderColor: 'brand.500',
+//         _focus: {
+//           borderColor: 'brand.500',
+//           boxShadow: `0px 1px 0px 0px #3F51B5`,
+//         },
+//       },
+//     },
+//   },
+//   defaultProps: {
+//     colorScheme: 'brand',
+//     focusBorderColor: 'brand.500',
+//   },
+// }
 const Link = {
   baseStyle: {
     ...brandRing,
@@ -108,6 +143,12 @@ const Link = {
       textDecoration: 'none',
       _hover: {
         textDecoration: 'none',
+      },
+    },
+    noFocus: {
+      _focus: {
+        ring: 0,
+        ringColor: 'transparent',
       },
     },
   },

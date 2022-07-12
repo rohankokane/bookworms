@@ -37,11 +37,11 @@ function CreatePostForm({ onClose }) {
         placeholder='What are you reading today?'
         onChange={inputHandler}
         type='textarea'
-        rows='6'
+        rows='8'
         validators={[VALIDATOR_MINLENGTH(6)]}
       />
       <Flex paddingY='2' w='full' justify='end'>
-        <Button size='sm' onClick={() => handleCreatePost(formState)}>
+        <Button size='md' onClick={() => handleCreatePost(formState)}>
           Post
         </Button>
       </Flex>

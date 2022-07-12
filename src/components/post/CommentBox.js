@@ -39,7 +39,7 @@ const CommentBox = ({ postId, comments = [], focusOnComment = false }) => {
 
   useEffect(() => {
     if (!focusOnComment) return
-    console.log({ focusOnComment, a: 'LOGGED' })
+
     commentBoxRef.current.focus()
   }, [focusOnComment])
 
@@ -47,13 +47,12 @@ const CommentBox = ({ postId, comments = [], focusOnComment = false }) => {
 
   const handleAddComment = (e) => {
     e.preventDefault()
-    console.log(e.target.commentField.value)
+
     const { value } = e.target.commentField
     if (!value) return
 
     dispatch(addComment({ data: { text: value }, pid: postId, token }))
       .then((action) => {
-        console.log('then action', action)
         if (action.meta.requestStatus === STATUS_REJECTED) throw action
         else e.target.reset()
       })
@@ -69,8 +68,6 @@ const CommentBox = ({ postId, comments = [], focusOnComment = false }) => {
       })
   }
   const handleDeleteComment = () => {
-    console.log(commentToDelete)
-
     dispatch(deleteComment({ cid: commentToDelete, token }))
       .then((action) => {
         if (action.error) throw action
