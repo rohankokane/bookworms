@@ -102,7 +102,7 @@ function NavBar() {
           <SiteLogo size='lg' />
           <Spacer />
           <Box {...getBoxStyle()}>
-            <Link tabIndex={-1} to='/'>
+            <Link as={NavLink} tabIndex={-1} to='/'>
               <IconBtn
                 // as={}
                 aria-label='go to home feed'
@@ -129,7 +129,7 @@ function NavBar() {
               icon={<IoLogOut />}
             />
             <IconBtn
-              aria-label='Logout'
+              aria-label='my profile'
               p={1}
               color={'brand.500'}
               mx={1}

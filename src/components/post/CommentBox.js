@@ -130,7 +130,7 @@ const CommentBox = ({ postId, comments = [], focusOnComment = false }) => {
         {comments.length &&
           comments[0].id !== undefined &&
           comments.map((comment) => (
-            <HStack align={'flex-start'} key={comment.user.id}>
+            <HStack align={'flex-start'} key={comment.id}>
               <Avatar
                 size={'sm'}
                 name={comment.user.fullname}

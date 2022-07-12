@@ -104,7 +104,7 @@ function ProfileTab({ profileData }) {
                 fontWeight={'hairline'}
                 // mb={2}
               >
-                {profileData.username}
+                @{profileData.username}
               </Text>
               <ProfileButton
                 onClick={onProfileButtonClick}

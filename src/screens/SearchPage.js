@@ -63,9 +63,9 @@ const SearchPage = () => {
           <Text
             color={'gray.600'}
             textAlign={'center'}
-            mt={'4'}
             fontSize={'lg'}
             fontWeight='500'
+            style={{ marginTop: '2rem' }}
           >
             No users found
           </Text>

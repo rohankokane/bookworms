@@ -12,7 +12,7 @@ function UserTag({ profile }) {
           as={RouterLink}
           to={`/profile/${profile.id}`}
         >
-          {profile.username}
+          @{profile.username}
         </Link>
         <Text paddingLeft={'6px'} fontSize={'sm'}>
           {profile.fullname}
