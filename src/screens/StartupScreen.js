@@ -7,7 +7,7 @@ from {transform: scale(0.7)}
 to {transform: scale(1)}
 `
 
-const scaleAnimation = `${scaleUp} 2s cubic-bezier(0.69, 0.1, 0, 0.43)`
+const scaleAnimation = `${scaleUp} 1s cubic-bezier(0.69, 0.1, 0, 0.43)`
 
 const StartupScreen = () => {
   return (
@@ -24,7 +24,7 @@ const StartupScreen = () => {
       px={[1, 2, 4]}
       zIndex={10}
       bg={'white'}
-      paddingBottom='24'
+      paddingBottom={['40', '32']}
     >
       <LoadingScreen marginTop='20' />
       <SiteLogo size='2xl' animation={scaleAnimation} />

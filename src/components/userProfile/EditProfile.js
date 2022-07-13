@@ -7,7 +7,7 @@ import FormInput from 'components/Input'
 import { prepareFormData, useForm } from 'hooks/form-hook'
 import { useDispatch } from 'react-redux'
 import { useClient } from 'hooks/client-hook'
-import { Button, Flex, useToast, VStack } from '@chakra-ui/react'
+import { Button, Flex, Spacer, useToast, VStack } from '@chakra-ui/react'
 import { useAuth } from 'hooks/auth-hook'
 import { updateUser } from 'store/userSlice'
 
@@ -102,6 +102,7 @@ function EditProfile({ initialData, onClose }) {
       </VStack>
       {/* <Divider /> */}
       <Flex padding='2' w='full' justify='end'>
+        <Spacer />
         <Button variant={'ghost'} size='sm' mr='4' onClick={onClose}>
           Cancel
         </Button>
