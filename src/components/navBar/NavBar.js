@@ -32,7 +32,7 @@ import { logOut, logout } from 'store/userSlice'
 import { BsBookmarkCheck } from 'react-icons/bs'
 import { NavLink } from 'react-router-dom'
 import { useAuth } from 'hooks/auth-hook'
-const activeStyle = {
+const activeNavUnderlineStyle = {
   borderBottom: '3px solid',
   borderColor: 'brand.500',
   fontWeight: '600',
@@ -99,47 +99,50 @@ function NavBar() {
           width='100%'
           height={'16'}
         >
+          {/* {isMobile && !userId && <Spacer />} */}
           <SiteLogo size='lg' />
           <Spacer />
-          <Box {...getBoxStyle()}>
-            <Link as={NavLink} tabIndex={-1} to='/'>
+          {!isMobile && userId && (
+            <Box>
+              <Link as={NavLink} tabIndex={-1} to='/'>
+                <IconBtn
+                  // as={}
+                  aria-label='go to home feed'
+                  p={1}
+                  color={'brand.500'}
+                  mx={1}
+                  icon={<AiFillHome />}
+                />
+              </Link>
               <IconBtn
-                // as={}
-                aria-label='go to home feed'
+                aria-label='create post'
                 p={1}
                 color={'brand.500'}
                 mx={1}
-                icon={<AiFillHome />}
+                onClick={onOpen}
+                icon={<AiFillPlusCircle />}
               />
-            </Link>
-            <IconBtn
-              aria-label='create post'
-              p={1}
-              color={'brand.500'}
-              mx={1}
-              onClick={onOpen}
-              icon={<AiFillPlusCircle />}
-            />
-            <IconBtn
-              aria-label='Logout'
-              p={1}
-              color={'brand.500'}
-              mx={1}
-              onClick={onLogout}
-              icon={<IoLogOut />}
-            />
-            <IconBtn
-              aria-label='my profile'
-              p={1}
-              color={'brand.500'}
-              mx={1}
-              onClick={() => {
-                navigate(`/profile/${userId}`)
-              }}
-              icon={<Avatar size={'sm'} name={fullname} src={image} />}
-            />
-          </Box>
-          {isMobile && (
+              <IconBtn
+                aria-label='Logout'
+                p={1}
+                color={'brand.500'}
+                mx={1}
+                onClick={onLogout}
+                icon={<IoLogOut />}
+              />
+              <IconBtn
+                aria-label='my profile'
+                p={1}
+                color={'brand.500'}
+                mx={1}
+                onClick={() => {
+                  navigate(`/profile/${userId}`)
+                }}
+                icon={<Avatar size={'sm'} name={fullname} src={image} />}
+              />
+            </Box>
+          )}
+          {isMobile && userId && (
             <IconBtn
               aria-label='Logout'
               p={1}
@@ -148,14 +151,14 @@ function NavBar() {
               icon={<AiOutlineLogout />}
             />
           )}
-          {isMobile && (
+          {isMobile && userId && (
             <Box px={'1'} {...getBoxStyle()}>
               <Link
                 variant='noFocus'
                 tabIndex={-1}
                 as={NavLink}
                 to={'/'}
-                _activeLink={activeStyle}
+                _activeLink={activeNavUnderlineStyle}
               >
                 <IconBtn
                   variant={'noFocus'}
@@ -171,7 +174,7 @@ function NavBar() {
                 tabIndex={-1}
                 as={NavLink}
                 to={'/search'}
-                _activeLink={activeStyle}
+                _activeLink={activeNavUnderlineStyle}
               >
                 <IconBtn
                   variant={'noFocus'}
@@ -196,7 +199,7 @@ function NavBar() {
                 tabIndex={-1}
                 as={NavLink}
                 to={'/bookmarks'}
-                _activeLink={activeStyle}
+                _activeLink={activeNavUnderlineStyle}
               >
                 <IconBtn
                   variant={'noFocus'}
@@ -207,10 +210,10 @@ function NavBar() {
                   icon={<BsBookmarkCheck />}
                 />
               </Link>
-              <Box {...(isUserProfile && activeStyle)}>
+              <Box {...(isUserProfile && activeNavUnderlineStyle)}>
                 <IconBtn
                   variant={'noFocus'}
-                  aria-label='Logout'
+                  aria-label='my profile'
                   color={'brand.500'}
                   size='md'
                   fontSize='1.75rem'

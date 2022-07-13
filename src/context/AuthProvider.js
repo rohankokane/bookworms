@@ -1,16 +1,29 @@
 import { useToast } from '@chakra-ui/react'
-import { useAuth } from 'hooks/auth-hook'
+
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { loginUser, logOut, logout } from 'store/userSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import StartupScreen from 'screens/StartupScreen'
+import { loginUser, logOut, notLoggedIn } from 'store/userSlice'
+import {
+  STATUS_PENDING,
+  STATUS_REJECTED,
+  STATUS_SUCCESS,
+} from 'utils/constants'
 
 const LOCALSTORAGE_KEY = process.env.REACT_APP_LOCALSTORAGE_KEY
 let logoutTimer
 
 function AuthProvider({ children }) {
-  const { token, tokenExpirationDate } = useAuth()
+  const { token, tokenExpirationDate, status } = useSelector(
+    (state) => state.user
+  )
   const dispatch = useDispatch()
   const toast = useToast()
+  const isLoading = status === STATUS_PENDING
+  const isIdle = status === null
+  const isError = status === STATUS_REJECTED
+  const isSuccess = status === STATUS_SUCCESS
+
   useEffect(() => {
     // on app mount get user data from localStorage to automatically log the user in
     const storedData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY))
@@ -35,6 +48,8 @@ function AuthProvider({ children }) {
           isClosable: true,
         })
       })
+    } else {
+      dispatch(notLoggedIn())
     }
   }, [])
 
@@ -61,7 +76,8 @@ function AuthProvider({ children }) {
     }
   }, [token, tokenExpirationDate])
 
-  return children
+  if (isLoading || isIdle) return <StartupScreen />
+  else return children
 }
 
 export default AuthProvider

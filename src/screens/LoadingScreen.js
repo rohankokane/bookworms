@@ -1,8 +1,8 @@
-import { Spinner } from '@chakra-ui/react'
+import { Box, Spinner } from '@chakra-ui/react'
 
-const LoadingScreen = () => {
+const LoadingScreen = ({ ...props }) => {
   return (
-    <div
+    <Box
       style={{
         width: '100%',
         minHeight: '300px',
@@ -10,6 +10,7 @@ const LoadingScreen = () => {
         justifyContent: 'center',
         paddingTop: '5rem',
       }}
+      {...props}
     >
       <Spinner
         speed='0.55s'
@@ -18,7 +19,7 @@ const LoadingScreen = () => {
         size='xl'
         thickness='5px'
       />
-    </div>
+    </Box>
   )
 }
 

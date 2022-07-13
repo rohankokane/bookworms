@@ -103,6 +103,9 @@ const userSlice = createSlice({
       state.currentProfile = state.user
       state.currentProfile.status = STATUS_SUCCESS
     },
+    notLoggedIn: (state) => {
+      state.status = STATUS_REJECTED
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -241,6 +244,6 @@ const userSlice = createSlice({
       })
   },
 })
-export const { currentUserProfile } = userSlice.actions
+export const { currentUserProfile, notLoggedIn } = userSlice.actions
 
 export default userSlice.reducer
