@@ -60,13 +60,12 @@ function AuthProvider({ children }) {
         new Date(tokenExpirationDate).getTime() - new Date().getTime()
       logoutTimer = setTimeout(() => {
         dispatch(logOut()).then(() => {
-          console.log('LOGGED OUT, TIME UP')
           toast({
             title: 'Logged out',
             description: `You session has expired, please login again`,
             status: 'info',
             position: 'bottom-right',
-            duration: null,
+            duration: 10000,
             isClosable: true,
           })
         })

@@ -247,7 +247,7 @@ function Post({ post }) {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent mx={'2'}>
           <ModalHeader>Confirmation</ModalHeader>
           {/* <ModalCloseButton /> */}
           <ModalBody>Are you sure, you want to delete this post?</ModalBody>

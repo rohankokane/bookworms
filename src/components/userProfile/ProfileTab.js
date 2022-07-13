@@ -148,7 +148,7 @@ function ProfileTab({ profileData }) {
       />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent mx={'2'}>
           <ModalHeader>Edit profile</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
