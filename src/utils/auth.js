@@ -7,7 +7,7 @@ export const saveAuth = (uid, token, tokenExpirationDate) => {
     JSON.stringify({
       userId: uid,
       token: token,
-      expiration: tokenExpirationDate.toISOString(),
+      expiration: tokenExpirationDate,
     })
   )
 }

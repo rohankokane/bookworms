@@ -12,7 +12,7 @@ import { useAuth } from 'hooks/auth-hook'
 import { updateUser } from 'store/userSlice'
 
 function EditProfile({ initialData, onClose }) {
-  const { userId } = useAuth()
+  const { userId, token } = useAuth()
   const dispatch = useDispatch()
   const client = useClient()
   const toast = useToast()
@@ -42,20 +42,38 @@ function EditProfile({ initialData, onClose }) {
     const dataToSend = prepareFormData(data)
 
     // return
-    dispatch(
-      updateUser(
-        client(`users/${userId}`, { method: 'PATCH', data: dataToSend })
-      )
-    ).then(() => {
-      toast({
-        title: 'Profile updated',
-        status: 'success',
-        position: 'bottom-right',
-        duration: 5000,
-        isClosable: true,
+    dispatch(updateUser({ userId, token, data: dataToSend }))
+      .then((action) => {
+        if (!action.error) {
+          toast({
+            title: 'Profile updated',
+            status: 'success',
+            position: 'bottom-right',
+            duration: 5000,
+            isClosable: true,
+          })
+          onClose()
+        } else {
+          toast({
+            title: 'Error occurred',
+            description: `${action?.error?.message} Please try again`,
+            status: 'error',
+            position: 'bottom-right',
+            duration: 5000,
+            isClosable: true,
+          })
+        }
       })
-      onClose()
-    })
+      .catch((action) => {
+        toast({
+          title: 'Error occurred',
+          description: `${action?.error?.message} Please try again`,
+          status: 'error',
+          position: 'bottom-right',
+          duration: 5000,
+          isClosable: true,
+        })
+      })
   }
 
   return (

@@ -159,7 +159,7 @@ function Post({ post }) {
           postId={post.id}
         />
       ) : (
-        <Box as='p' w='full' textAlign={'left'} p={4}>
+        <Box as='p' w='full' fontSize={'0.9375rem'} textAlign={'left'} p={4}>
           {post.caption}
         </Box>
       )}

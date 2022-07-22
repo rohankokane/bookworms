@@ -11,7 +11,6 @@ import {
 } from 'utils/constants'
 
 const LOCALSTORAGE_KEY = process.env.REACT_APP_LOCALSTORAGE_KEY
-let logoutTimer
 
 function AuthProvider({ children }) {
   const { token, tokenExpirationDate, status } = useSelector(
@@ -36,7 +35,7 @@ function AuthProvider({ children }) {
         loginUser({
           userId: storedData.userId,
           token: storedData.token,
-          tokenExpirationDate: new Date(storedData.expiration),
+          tokenExpirationDate: storedData.expiration,
         })
       ).catch((err) => {
         toast({
@@ -54,22 +53,25 @@ function AuthProvider({ children }) {
   }, [])
 
   useEffect(() => {
-    // set timer to automatically logout on token expiry
+    let logoutTimer
+
     if (token && tokenExpirationDate) {
-      const remainingTime =
-        new Date(tokenExpirationDate).getTime() - new Date().getTime()
-      logoutTimer = setTimeout(() => {
-        dispatch(logOut()).then(() => {
-          toast({
-            title: 'Logged out',
-            description: `You session has expired, please login again`,
-            status: 'info',
-            position: 'bottom-right',
-            duration: 10000,
-            isClosable: true,
+      // set timer to automatically logout on token expiry
+      const remainingTime = tokenExpirationDate - Date.now()
+      if (remainingTime < 3600 * 1000) {
+        logoutTimer = setTimeout(() => {
+          dispatch(logOut()).then(() => {
+            toast({
+              title: 'Logged out',
+              description: `You session has expired, please login again`,
+              status: 'info',
+              position: 'bottom-right',
+              duration: 10000,
+              isClosable: true,
+            })
           })
-        })
-      }, remainingTime)
+        }, remainingTime)
+      }
     } else {
       clearTimeout(logoutTimer)
     }

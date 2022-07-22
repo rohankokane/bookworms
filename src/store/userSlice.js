@@ -15,7 +15,7 @@ export const loginUser = createAsyncThunk(
       return client(`users/bootstrap/${userId}`, { token })
         .then((userData) => {
           userData.token = token
-          userData.tokenExpirationDate = tokenExpirationDate.toISOString()
+          userData.tokenExpirationDate = tokenExpirationDate
           saveAuth(userData.userId, userData.token, tokenExpirationDate)
           return userData
         })
@@ -31,12 +31,11 @@ export const loginUser = createAsyncThunk(
         .then((resData) => {
           const { expirationDate, ...userData } = resData
 
-          const tokenExpirationDate =
-            expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60)
+          const tokenExpirationDate = expirationDate
           saveAuth(userData.userId, userData.token, tokenExpirationDate)
           return {
             ...userData,
-            tokenExpirationDate: tokenExpirationDate.toISOString(),
+            tokenExpirationDate: tokenExpirationDate,
           }
         })
         .catch((e) => {
@@ -54,17 +53,16 @@ export const signupUser = createAsyncThunk('user/signup', async (data) => {
   }).then((resData) => {
     const { expirationDate, ...userData } = resData
 
-    const tokenExpirationDate =
-      expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60)
+    const tokenExpirationDate = expirationDate
     saveAuth(userData.userId, userData.token, tokenExpirationDate)
     return {
       ...userData,
-      tokenExpirationDate: tokenExpirationDate.toISOString(),
+      tokenExpirationDate: tokenExpirationDate,
     }
   })
 })
 export const getProfileData = createAsyncThunk(
-  'user/profileData ',
+  'user/profileData',
   async ({ userId, token }) => {
     return client(`users/${userId}`, { token })
   }
@@ -73,13 +71,13 @@ export const getProfileData = createAsyncThunk(
 // update with /:id
 export const updateUser = createAsyncThunk(
   'user/updateUser',
-  async (promise) => {
-    return promise
+  async ({ userId, data, token }) => {
+    return client(`users/${userId}`, { method: 'PATCH', data, token })
   }
 )
 export const followProfile = createAsyncThunk(
   'user/followProfile',
-  async ({ profileId, userId, isFollowed, token }, thunkApi) => {
+  async ({ profileId, userId, isFollowed, token }) => {
     return client(`users/${isFollowed ? 'un' : ''}follow/${profileId}`, {
       token,
     })
@@ -96,7 +94,10 @@ const userSlice = createSlice({
     token: '',
     status: null,
     error: null,
-    currentProfile: {},
+    currentProfile: {
+      status: null,
+      error: null,
+    },
   },
   reducers: {
     currentUserProfile: (state) => {
@@ -145,25 +146,34 @@ const userSlice = createSlice({
       })
       .addCase(signupUser.rejected, (state, action) => {
         state.status = STATUS_REJECTED
-        state.error = action.payload.message
+        state.error = action.error.message
       })
-      .addCase(getProfileData.pending, (state, { payload }) => {
-        state.currentProfile.status = STATUS_PENDING
+      .addCase(getProfileData.pending, (state, action) => {
+        console.log(action)
+        state.currentProfile = {
+          status: STATUS_PENDING,
+          error: null,
+        }
       })
-      .addCase(getProfileData.fulfilled, (state, { payload }) => {
+      .addCase(getProfileData.fulfilled, (state, action) => {
+        const { payload } = action
         state.currentProfile = payload
         state.currentProfile.status = STATUS_SUCCESS
+        state.currentProfile.error = null
       })
-      .addCase(getProfileData.rejected, (state, { payload }) => {
-        state.currentProfile.error = payload
-        state.currentProfile.status = STATUS_REJECTED
+      .addCase(getProfileData.rejected, (state, action) => {
+        console.log(action)
+        state.currentProfile = {
+          status: STATUS_REJECTED,
+          error: action?.error?.message,
+        }
       })
-
       .addCase(updateUser.pending, (state) => {
-        state.status = STATUS_PENDING
+        state.currentProfile.status = STATUS_PENDING
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.status = STATUS_SUCCESS
+        state.currentProfile.status = STATUS_SUCCESS
         state.user = { ...state.user, ...action.payload.user }
         state.currentProfile = {
           ...state.currentProfile,
@@ -171,8 +181,10 @@ const userSlice = createSlice({
         }
       })
       .addCase(updateUser.rejected, (state, action) => {
-        state.status = STATUS_REJECTED
-        state.error = action.payload.message
+        // state.status = STATUS_REJECTED
+        state.currentProfile.status = STATUS_SUCCESS
+        // state.currentProfile.status = STATUS_REJECTED
+        state.error = action.error.message
       })
       .addCase(followProfile.pending, (state, action) => {
         const { userId, profileId, isFollowed } = action.meta.arg

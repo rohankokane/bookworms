@@ -70,6 +70,7 @@ function NavBar() {
       bottom: '0',
       left: '0',
       height: '63px',
+      boxShadow: '0 -1px 3px 1px rgb(0 0 0 / 5%)',
     }
   }
 
@@ -151,100 +152,99 @@ function NavBar() {
               icon={<AiOutlineLogout />}
             />
           )}
-          {isMobile && userId && (
-            <Box px={'1'} {...getBoxStyle()}>
-              <Link
-                variant='noFocus'
-                tabIndex={-1}
-                as={NavLink}
-                to={'/'}
-                _activeLink={activeNavUnderlineStyle}
-              >
-                <IconBtn
-                  variant={'noFocus'}
-                  aria-label='go to home feed'
-                  color={'brand.500'}
-                  size='md'
-                  fontSize='1.75rem'
-                  icon={<AiOutlineHome />}
-                />
-              </Link>
-              <Link
-                variant='noFocus'
-                tabIndex={-1}
-                as={NavLink}
-                to={'/search'}
-                _activeLink={activeNavUnderlineStyle}
-              >
-                <IconBtn
-                  variant={'noFocus'}
-                  aria-label='search users'
-                  color={'brand.500'}
-                  size='md'
-                  fontSize='1.75rem'
-                  icon={<AiOutlineSearch />}
-                />
-              </Link>
-              <IconBtn
-                aria-label='create post'
-                paddingX={'0'}
-                color={'brand.500'}
-                size='md'
-                fontSize='1.75rem'
-                onClick={onOpen}
-                icon={<AiFillPlusCircle />}
-              />
-              <Link
-                variant='noFocus'
-                tabIndex={-1}
-                as={NavLink}
-                to={'/bookmarks'}
-                _activeLink={activeNavUnderlineStyle}
-              >
-                <IconBtn
-                  variant={'noFocus'}
-                  aria-label='my bookmarks'
-                  color={'brand.500'}
-                  size='md'
-                  fontSize='1.75rem'
-                  icon={<BsBookmarkCheck />}
-                />
-              </Link>
-              <Box {...(isUserProfile && activeNavUnderlineStyle)}>
-                <IconBtn
-                  variant={'noFocus'}
-                  aria-label='my profile'
-                  color={'brand.500'}
-                  size='md'
-                  fontSize='1.75rem'
-                  onClick={() => {
-                    navigate(`/profile/${userId}`)
-                  }}
-                  icon={
-                    <Avatar
-                      size={'sm'}
-                      // mx={1}
-                      name={fullname}
-                      src={image}
-                    />
-                  }
-                />
-              </Box>
-            </Box>
-          )}
-
-          <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent mx={'2'}>
-              <ModalHeader>Create a new post</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody padding={'1rem'}>
-                <CreatePostForm onClose={onClose} />
-              </ModalBody>
-            </ModalContent>
-          </Modal>
         </Container>
       </Center>
+      {isMobile && userId && (
+        <Box zIndex={5} px={'1'} {...getBoxStyle()}>
+          <Link
+            variant='noFocus'
+            tabIndex={-1}
+            as={NavLink}
+            to={'/'}
+            _activeLink={activeNavUnderlineStyle}
+          >
+            <IconBtn
+              variant={'noFocus'}
+              aria-label='go to home feed'
+              color={'brand.500'}
+              size='md'
+              fontSize='1.75rem'
+              icon={<AiOutlineHome />}
+            />
+          </Link>
+          <Link
+            variant='noFocus'
+            tabIndex={-1}
+            as={NavLink}
+            to={'/search'}
+            _activeLink={activeNavUnderlineStyle}
+          >
+            <IconBtn
+              variant={'noFocus'}
+              aria-label='search users'
+              color={'brand.500'}
+              size='md'
+              fontSize='1.75rem'
+              icon={<AiOutlineSearch />}
+            />
+          </Link>
+          <IconBtn
+            aria-label='create post'
+            paddingX={'0'}
+            color={'brand.500'}
+            size='md'
+            fontSize='1.75rem'
+            onClick={onOpen}
+            icon={<AiFillPlusCircle />}
+          />
+          <Link
+            variant='noFocus'
+            tabIndex={-1}
+            as={NavLink}
+            to={'/bookmarks'}
+            _activeLink={activeNavUnderlineStyle}
+          >
+            <IconBtn
+              variant={'noFocus'}
+              aria-label='my bookmarks'
+              color={'brand.500'}
+              size='md'
+              fontSize='1.75rem'
+              icon={<BsBookmarkCheck />}
+            />
+          </Link>
+          <Box {...(isUserProfile && activeNavUnderlineStyle)}>
+            <IconBtn
+              variant={'noFocus'}
+              aria-label='my profile'
+              color={'brand.500'}
+              size='md'
+              fontSize='1.75rem'
+              onClick={() => {
+                navigate(`/profile/${userId}`)
+              }}
+              icon={
+                <Avatar
+                  size={'sm'}
+                  // mx={1}
+                  name={fullname}
+                  src={image}
+                />
+              }
+            />
+          </Box>
+        </Box>
+      )}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent mx={'2'}>
+          <ModalHeader>Create a new post</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody padding={'1rem'}>
+            <CreatePostForm onClose={onClose} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </nav>
   )
 }
