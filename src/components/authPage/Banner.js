@@ -1,5 +1,5 @@
 import { VStack } from '@chakra-ui/react'
-import { ReactComponent as BannerImg } from '../../assets/banner-img.svg'
+import { ReactComponent as BannerImg } from '../../assets/bibliophile.svg'
 // import banner from './banner.jpg'
 
 function Banner() {
@@ -13,7 +13,9 @@ function Banner() {
       alignItems='center'
       justifyContent={'center'}
     >
-      <BannerImg style={{ margin: '0 auto' }} />
+      <BannerImg
+        style={{ margin: '0 auto 0', width: '80%', maxWidth: '600px' }}
+      />
     </VStack>
   )
 }

@@ -84,58 +84,74 @@ const postsSlice = createSlice({
     builder
       .addCase(getPosts.pending, (state) => {
         state.status = STATUS_PENDING
+        state.posts = []
+        state.error = null
       })
       .addCase(getPosts.fulfilled, (state, action) => {
         state.status = STATUS_SUCCESS
         state.posts = action.payload.posts
+        state.error = null
       })
       .addCase(getPosts.rejected, (state, action) => {
         state.status = STATUS_REJECTED
-        state.error = action.payload.message
+        console.log('REJECTED', { action })
+        state.posts = []
+        state.error = action.error.message
       })
       .addCase(getPostById.pending, (state) => {
         state.status = STATUS_PENDING
+        state.error = null
         state.posts = []
       })
       .addCase(getPostById.fulfilled, (state, action) => {
         state.status = STATUS_SUCCESS
+        state.error = null
         state.posts = [action.payload.post]
       })
       .addCase(getPostById.rejected, (state, action) => {
         state.status = STATUS_REJECTED
-        state.error = action.payload.message
+        state.posts = []
+        state.error = action.error.message
       })
       .addCase(getPostsByUserId.pending, (state) => {
         state.status = STATUS_PENDING
         state.posts = []
+        state.error = null
       })
       .addCase(getPostsByUserId.fulfilled, (state, action) => {
         state.status = STATUS_SUCCESS
         state.posts = [...action.payload.posts]
+        state.error = null
       })
       .addCase(getPostsByUserId.rejected, (state, action) => {
         state.status = STATUS_REJECTED
-        state.error = action.payload.message
+        state.posts = []
+        state.error = action.error.message
       })
       .addCase(getBookemarkedByUserId.pending, (state, action) => {
         state.status = STATUS_PENDING
         state.posts = []
+        state.error = null
       })
       .addCase(getBookemarkedByUserId.fulfilled, (state, action) => {
         state.status = STATUS_SUCCESS
         state.posts = [...action.payload.posts]
+        state.error = null
       })
       .addCase(getBookemarkedByUserId.rejected, (state, action) => {
         state.status = STATUS_REJECTED
-        state.error = action.payload
+        state.posts = []
+        state.error = action.error.message
       })
 
       .addCase(createPost.pending, (state) => {
         state.status = STATUS_PENDING
+        state.error = null
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.status = STATUS_SUCCESS
         state.posts.unshift(action.payload.post)
+        state.error = null
       })
       .addCase(createPost.rejected, (state, action) => {
         state.status = STATUS_REJECTED
@@ -164,6 +180,7 @@ const postsSlice = createSlice({
       .addCase(likePost.rejected, (state, action) => {
         //
         state.status = STATUS_REJECTED
+        state.error = action.error.message
         const { pid, isLiked, userId } = action.meta.arg
         let postIndex = state.posts.findIndex((post) => post.id === pid)
         // ! -> reverting the changes

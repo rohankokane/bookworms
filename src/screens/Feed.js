@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
-import PostsList from 'components/feed/PostsList'
-import { useAuth } from 'hooks/auth-hook'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
+import { useAuth } from 'hooks/auth-hook'
 import { getPosts } from 'store/postsSlice'
-import LoadingScreen from './LoadingScreen'
+import ScreenProvider from 'context/ScreenProvider'
+import PostsList from 'components/feed/PostsList'
 
 function Feed() {
   const { status, error, posts } = useSelector((state) => state.posts)
@@ -15,9 +15,11 @@ function Feed() {
     dispatch(getPosts(token))
   }, [])
 
-  let isLoading = status === 'pending'
-
-  return isLoading ? <LoadingScreen /> : <PostsList posts={posts} />
+  return (
+    <ScreenProvider status={status} error={error}>
+      <PostsList posts={posts} />
+    </ScreenProvider>
+  )
 }
 
 export default Feed

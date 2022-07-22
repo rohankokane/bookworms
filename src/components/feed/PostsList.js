@@ -2,13 +2,6 @@ import { Center, List, ListItem } from '@chakra-ui/react'
 import Post from './Post'
 
 function PostsList({ posts }) {
-  // if (!posts.length)
-  //   return (
-  //     <Center color='gray.600' fontSize={'sm'}>
-  //       No posts
-  //     </Center>
-  //   )
-
   return (
     <>
       <List>

@@ -41,7 +41,6 @@ function ProfileTab({ profileData }) {
   let isFollowed = false
   if (!isOwnProfile) {
     //or check if it's there in user's following
-    // eslint-disable-next-line no-debugger
 
     if (profileData.followers[0]?.id === undefined)
       isFollowed = profileData.followers.some((id) => id === userId)
@@ -69,7 +68,6 @@ function ProfileTab({ profileData }) {
     }
   }
 
-  const uidColSpan = useBreakpointValue({ base: 2, md: 1 })
   const avatarSize = useBreakpointValue({ base: 'xl', md: '2xl' })
   const statsBar = useBreakpointValue({ base: 'grid', md: 'none' })
   const statsMd = useBreakpointValue({ base: 'none', md: 'grid' })

@@ -1,7 +1,6 @@
 import { Box, Container, Divider } from '@chakra-ui/react'
 import PostsList from 'components/feed/PostsList'
 import ProfileTab from 'components/userProfile/ProfileTab'
-import LoadingScreen from './LoadingScreen'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
@@ -9,13 +8,16 @@ import { useEffect } from 'react'
 import { currentUserProfile, getProfileData } from 'store/userSlice'
 import { getPostsByUserId } from 'store/postsSlice'
 import { useAuth } from 'hooks/auth-hook'
-import { STATUS_PENDING, STATUS_SUCCESS } from 'utils/constants'
+import ScreenProvider from 'context/ScreenProvider'
 
 function UserProfile() {
-  // const { profile: currentProfile, posts } = useProfile()
   const { userId, token } = useAuth()
   const { currentProfile } = useSelector((state) => state.user)
-  const { posts, status: postsStatus } = useSelector((state) => state.posts)
+  const {
+    posts,
+    status: postsStatus,
+    error: postsError,
+  } = useSelector((state) => state.posts)
   const { id } = useParams()
   const dispatch = useDispatch()
 
@@ -27,18 +29,20 @@ function UserProfile() {
     dispatch(getPostsByUserId({ userId: id, token }))
   }, [id])
 
-  let isLoading =
-    !currentProfile.status || currentProfile.status !== STATUS_SUCCESS
-  let isLoadingPosts = postsStatus === STATUS_PENDING
-  if (isLoading) return <LoadingScreen />
-  // console.log(currentProfile)
   return (
     <Box>
-      <ProfileTab profileData={currentProfile} postsCount={posts.length || 0} />
-      <Divider my={4} mb={6} />
-      <Container size={'container.md'} paddingX='0'>
-        {isLoadingPosts ? <LoadingScreen /> : <PostsList posts={posts} />}
-      </Container>
+      <ScreenProvider status={currentProfile.status} error={postsError}>
+        <ProfileTab
+          profileData={currentProfile}
+          postsCount={posts.length || 0}
+        />
+        <Divider my={4} mb={6} />
+        <ScreenProvider status={postsStatus} error={postsError}>
+          <Container size={'container.md'} paddingX='0'>
+            <PostsList posts={posts} />
+          </Container>
+        </ScreenProvider>
+      </ScreenProvider>
     </Box>
   )
 }
