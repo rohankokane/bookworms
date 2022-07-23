@@ -33,7 +33,6 @@ function AuthProvider({ children }) {
     ) {
       dispatch(
         loginUser({
-          userId: storedData.userId,
           token: storedData.token,
           tokenExpirationDate: storedData.expiration,
         })

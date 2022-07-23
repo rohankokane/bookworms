@@ -2,6 +2,7 @@
 
 // See https://developers.google.com/web/tools/workbox/modules
 
+import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { clientsClaim } from 'workbox-core'
 import { ExpirationPlugin } from 'workbox-expiration'
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching'
@@ -68,7 +69,7 @@ registerRoute(
   ({ url }) => url.origin === 'https://fonts.googleapis.com',
   new StaleWhileRevalidate({
     cacheName: 'google-fonts-stylesheets',
-    plugins: [new ExpirationPlugin({ maxAgeSeconds: 2592000, maxEntries: 30 })],
+    plugins: [new ExpirationPlugin({ maxAgeSeconds: 2592000, maxEntries: 10 })],
   })
 )
 
@@ -76,6 +77,19 @@ registerRoute(
   ({ url }) => url.origin === 'https://fonts.gstatic.com',
   new CacheFirst({
     cacheName: 'google-fonts-webfonts',
-    plugins: [new ExpirationPlugin({ maxAgeSeconds: 2592000, maxEntries: 30 })],
+    plugins: [new ExpirationPlugin({ maxAgeSeconds: 2592000, maxEntries: 20 })],
+  })
+)
+
+registerRoute(
+  ({ url }) =>
+    url.origin === 'https://bookworms-backend.herokuapp.com' &&
+    url.pathname === '/api/users/bootstrap',
+  new StaleWhileRevalidate({
+    cacheName: 'user-data-bootstrap',
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [0, 200] }),
+      new ExpirationPlugin({ maxAgeSeconds: 2592000, maxEntries: 2 }),
+    ],
   })
 )

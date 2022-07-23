@@ -9,10 +9,10 @@ import {
 
 export const loginUser = createAsyncThunk(
   'user/login',
-  async ({ userId, token, tokenExpirationDate, data }) => {
+  async ({ token, tokenExpirationDate, data }) => {
     // login existing logged in user
-    if (userId && token) {
-      return client(`users/bootstrap/${userId}`, { token })
+    if (token) {
+      return client(`users/bootstrap`, { token })
         .then((userData) => {
           userData.token = token
           userData.tokenExpirationDate = tokenExpirationDate
